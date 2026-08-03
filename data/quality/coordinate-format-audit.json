@@ -1,0 +1,387 @@
+{
+  "name": "coordinate-format-audit",
+  "schema_version": 1,
+  "snapshot_id": "paradas-de-transporte-publico@2026-08-02T19-27-36Z",
+  "dataset_id": "paradas-de-transporte-publico",
+  "resource_id": "ed2f1b0f-73e5-4a59-acb4-394f8ec36d7e",
+  "raw_file": "paradas-de-transporte-publico/2026-08-02T19-27-36Z.json",
+  "raw_sha256": "20969d2e6dbc4d91338901f88c2805afaf642b757adfa4be97225c7364bdc62c",
+  "row_count": 383,
+  "columns_audited": [
+    "Latitud",
+    "Longitud"
+  ],
+  "total_coordinate_values": 766,
+  "rows_with_any_nonblank": 383,
+  "rows_with_both_nonblank": 383,
+  "per_column_counts": {
+    "Latitud": {
+      "blank": 0,
+      "sentinel": 0,
+      "decimal_candidate": 52,
+      "decimal_comma_candidate": 0,
+      "thousands_separator_candidate": 331,
+      "dms_candidate": 0,
+      "wkt_or_geometry_candidate": 0,
+      "other_text": 0,
+      "unknown": 0
+    },
+    "Longitud": {
+      "blank": 0,
+      "sentinel": 0,
+      "decimal_candidate": 9,
+      "decimal_comma_candidate": 0,
+      "thousands_separator_candidate": 374,
+      "dms_candidate": 0,
+      "wkt_or_geometry_candidate": 0,
+      "other_text": 0,
+      "unknown": 0
+    }
+  },
+  "examples": {
+    "Latitud": {
+      "blank": [],
+      "sentinel": [],
+      "decimal_candidate": [
+        {
+          "row": 10,
+          "value": "-290.709"
+        },
+        {
+          "row": 18,
+          "value": "-289.867"
+        },
+        {
+          "row": 26,
+          "value": "-290.179"
+        },
+        {
+          "row": 42,
+          "value": "-291.137"
+        },
+        {
+          "row": 46,
+          "value": "-290.685"
+        },
+        {
+          "row": 54,
+          "value": "-291.429"
+        },
+        {
+          "row": 63,
+          "value": "-289.418"
+        },
+        {
+          "row": 83,
+          "value": "-289.626"
+        },
+        {
+          "row": 111,
+          "value": "-288.138"
+        },
+        {
+          "row": 119,
+          "value": "-288.124"
+        },
+        {
+          "row": 136,
+          "value": "-280.162"
+        },
+        {
+          "row": 146,
+          "value": "-288.842"
+        },
+        {
+          "row": 149,
+          "value": "-288.832"
+        },
+        {
+          "row": 154,
+          "value": "-288.499"
+        },
+        {
+          "row": 159,
+          "value": "-291.553"
+        },
+        {
+          "row": 160,
+          "value": "-291.552"
+        },
+        {
+          "row": 167,
+          "value": "-289.285"
+        },
+        {
+          "row": 179,
+          "value": "-291.601"
+        },
+        {
+          "row": 187,
+          "value": "-285.892"
+        },
+        {
+          "row": 191,
+          "value": "-290.819"
+        }
+      ],
+      "decimal_comma_candidate": [],
+      "thousands_separator_candidate": [
+        {
+          "row": 1,
+          "value": "-2.895.956"
+        },
+        {
+          "row": 2,
+          "value": "-2.908.987"
+        },
+        {
+          "row": 3,
+          "value": "-2.908.728"
+        },
+        {
+          "row": 4,
+          "value": "-2.911.547"
+        },
+        {
+          "row": 5,
+          "value": "-2.910.397"
+        },
+        {
+          "row": 6,
+          "value": "-2.910.711"
+        },
+        {
+          "row": 7,
+          "value": "-2.906.378"
+        },
+        {
+          "row": 8,
+          "value": "-2.906.159"
+        },
+        {
+          "row": 9,
+          "value": "-2.914.142"
+        },
+        {
+          "row": 11,
+          "value": "-2.908.374"
+        },
+        {
+          "row": 12,
+          "value": "-2.908.251"
+        },
+        {
+          "row": 13,
+          "value": "-2.895.498"
+        },
+        {
+          "row": 14,
+          "value": "-2.895.227"
+        },
+        {
+          "row": 15,
+          "value": "-2.910.479"
+        },
+        {
+          "row": 16,
+          "value": "-2.910.521"
+        },
+        {
+          "row": 17,
+          "value": "-2.898.906"
+        },
+        {
+          "row": 19,
+          "value": "-2.903.575"
+        },
+        {
+          "row": 20,
+          "value": "-2.894.167"
+        },
+        {
+          "row": 21,
+          "value": "-2.909.518"
+        },
+        {
+          "row": 22,
+          "value": "-2.907.428"
+        }
+      ],
+      "dms_candidate": [],
+      "wkt_or_geometry_candidate": [],
+      "other_text": [],
+      "unknown": []
+    },
+    "Longitud": {
+      "blank": [],
+      "sentinel": [],
+      "decimal_candidate": [
+        {
+          "row": 26,
+          "value": "-790.064"
+        },
+        {
+          "row": 75,
+          "value": "-79.0"
+        },
+        {
+          "row": 76,
+          "value": "-79.0"
+        },
+        {
+          "row": 299,
+          "value": "-78.99"
+        },
+        {
+          "row": 322,
+          "value": "-789.295"
+        },
+        {
+          "row": 325,
+          "value": "-79.037"
+        },
+        {
+          "row": 326,
+          "value": "-78.971"
+        },
+        {
+          "row": 329,
+          "value": "-789.084"
+        },
+        {
+          "row": 362,
+          "value": "-789.759"
+        }
+      ],
+      "decimal_comma_candidate": [],
+      "thousands_separator_candidate": [
+        {
+          "row": 1,
+          "value": "-79.014.574"
+        },
+        {
+          "row": 2,
+          "value": "-79.015.701"
+        },
+        {
+          "row": 3,
+          "value": "-79.015.773"
+        },
+        {
+          "row": 4,
+          "value": "-79.007.121"
+        },
+        {
+          "row": 5,
+          "value": "-79.010.522"
+        },
+        {
+          "row": 6,
+          "value": "-79.010.061"
+        },
+        {
+          "row": 7,
+          "value": "-79.023.371"
+        },
+        {
+          "row": 8,
+          "value": "-79.023.488"
+        },
+        {
+          "row": 9,
+          "value": "-78.996.122"
+        },
+        {
+          "row": 10,
+          "value": "-79.021.045"
+        },
+        {
+          "row": 11,
+          "value": "-79.017.546"
+        },
+        {
+          "row": 12,
+          "value": "-79.017.391"
+        },
+        {
+          "row": 13,
+          "value": "-79.016.888"
+        },
+        {
+          "row": 14,
+          "value": "-79.017.383"
+        },
+        {
+          "row": 15,
+          "value": "-78.996.205"
+        },
+        {
+          "row": 16,
+          "value": "-78.994.406"
+        },
+        {
+          "row": 17,
+          "value": "-79.011.234"
+        },
+        {
+          "row": 18,
+          "value": "-79.011.019"
+        },
+        {
+          "row": 19,
+          "value": "-79.003.034"
+        },
+        {
+          "row": 20,
+          "value": "-79.021.063"
+        }
+      ],
+      "dms_candidate": [],
+      "wkt_or_geometry_candidate": [],
+      "other_text": [],
+      "unknown": []
+    }
+  },
+  "format_resolved": false,
+  "decision": "format_unresolved",
+  "conversion_justified": false,
+  "geometry_generated": false,
+  "methodology": "Textual classification only: every exact raw Latitud/Longitud value is assigned to exactly one category using the documented deterministic precedence (blank; sentinel '?'; obvious WKT/geometry keyword followed by '(' before DMS/numeric; canonical grouped thousands with 2+ dot/comma separators of 3-digit groups; single-comma decimal; strict dot decimal; obvious DMS markers; residual text; unknown). Candidates are observational: the audit never claims what the separators mean, never interprets CRS/axis order/WGS84/UTM/DMS, never converts values, and never generates geometry. Ubicacion is never used.",
+  "evidence": {
+    "fields_audited": [
+      "Latitud",
+      "Longitud"
+    ],
+    "local_evidence_paths": [
+      "data/manifests/paradas-de-transporte-publico/2026-08-02T19-27-36Z.manifest.json",
+      "data/raw/paradas-de-transporte-publico/2026-08-02T19-27-36Z.json",
+      "docs/source-contract.md",
+      "src/mobility_reliability/validation/source_snapshot.py",
+      "src/mobility_reliability/transformation/snapshot.py",
+      "tests/test_validation.py",
+      "tests/test_transformation.py",
+      "tests/test_captured_snapshots.py"
+    ],
+    "manifest_metadata_fields_inspected": [
+      "source_metadata",
+      "resource",
+      "resource_id",
+      "resource_name",
+      "resource_format",
+      "resource_url",
+      "size",
+      "description",
+      "created",
+      "last_modified",
+      "metadata_modified"
+    ],
+    "source_data_dictionary_present_locally": false,
+    "notes": [
+      "Row numbers are 1-based data rows (row 1 = first CSV data row).",
+      "Classification is whitespace-insensitive; examples preserve the exact raw value.",
+      "Manifest/resource metadata fields are inspected by the strict structural validation the audit relies on; the audit adds the approved-dataset, approved-resource, and required-column gates.",
+      "The referenced ODS data dictionary (GADCuenca_ParadasTransporte_DD_2025Abril.ods) is absent locally; no local evidence proves source encoding, axis order, CRS, or a safe conversion."
+    ]
+  },
+  "recommendation": "Do not convert, reorder, reproject, or build geometry from Latitud/Longitud: no local evidence proves the source format, axis order, or CRS. Resolve the format with the official data dictionary or source documentation before any coordinate interpretation; until then every coordinate value remains unresolved text."
+}

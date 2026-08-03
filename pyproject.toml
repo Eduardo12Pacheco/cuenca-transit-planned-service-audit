@@ -1,0 +1,31 @@
+[project]
+name = "mobility-reliability"
+version = "0.1.0"
+description = "Auditoría del servicio planificado de transporte público de Cuenca (recopilación de snapshots CKAN de rutas/paradas)"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+# Demo local opcional sin conexión. Fijada a la versión disponible en la
+# caché local de uv para que `UV_OFFLINE=1 uv sync --extra demo` nunca
+# necesite la red. La demo es una app de Streamlit de solo lectura; no es
+# parte de la instalación base.
+demo = [
+    "streamlit==1.60.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]

@@ -1,2 +1,34 @@
-# Local Pi runtime state
+# Estado local del runtime de Pi
 .atl/
+
+# Índices de herramientas (locales, regenerables)
+.codegraph/
+
+# Las capturas raw actuales son evidencia de fuente, no contenido del repositorio.
+# Los manifests bajo data/manifests/ son pequeños y se versionan a propósito.
+data/raw/
+
+# Entornos Python y de tests locales
+.venv/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+
+# Artefactos generados/empaquetado
+*.egg-info/
+build/
+dist/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Estado local del runtime de Streamlit: solo se versiona la configuración
+# pública (el toolbarMode de la demo es parte de la presentación); todo lo
+# demás permanece local.
+.streamlit/*
+!.streamlit/config.toml
+
+# Logs locales
+*.log

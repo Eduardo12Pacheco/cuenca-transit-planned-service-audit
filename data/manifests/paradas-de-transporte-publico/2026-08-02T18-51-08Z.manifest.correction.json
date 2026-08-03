@@ -1,0 +1,19 @@
+{
+  "snapshot_id": "paradas-de-transporte-publico@2026-08-02T18-51-08Z",
+  "dataset_id": "paradas-de-transporte-publico",
+  "source_id": "cuenca-en-datos-stops",
+  "collection_timestamp_utc": "2026-08-02T18:51:08Z",
+  "supersedes_manifest": "2026-08-02T18-51-08Z.manifest.json",
+  "status": "superseded",
+  "raw_verifiable": false,
+  "raw_file": null,
+  "content_hash": null,
+  "row_count": null,
+  "unverified_original_claims": {
+    "raw_file": "paradas-de-transporte-publico/2026-08-02T18-51-08Z.json",
+    "content_hash": "a15063103fc7ea1e050f73b0fd8045def0bc786799069db32daebcd71f11c6ef"
+  },
+  "note": "No raw file is available for this manifest; the originally claimed content hash is not confirmed.",
+  "superseded_at_utc": "2026-08-02T19:19:51Z",
+  "schema_version": 1
+}

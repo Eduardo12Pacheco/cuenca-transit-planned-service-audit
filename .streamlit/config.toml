@@ -1,0 +1,8 @@
+# Configuración versionada de Streamlit para la demo pública.
+#
+# toolbarMode = "minimal" oculta el control público Deploy y la barra de
+# opciones/menú del shell del navegador (configuración de Streamlit soportada,
+# sin trucos de CSS). La demo es de solo lectura y sin conexión; los controles
+# de despliegue no son parte de la presentación pública.
+[client]
+toolbarMode = "minimal"

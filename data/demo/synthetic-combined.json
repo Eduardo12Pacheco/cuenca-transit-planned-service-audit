@@ -1,0 +1,885 @@
+{
+  "source_snapshots": [
+    {
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "source_id": "demo-source-routes",
+      "dataset_id": "rutas-de-transporte-publico",
+      "source_url": "https://demo.invalid/datasets/rutas",
+      "resource_id": "11111111-1111-4111-8111-111111111111",
+      "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+      "resource_format": "CSV",
+      "resource_url": "https://demo.invalid/resources/demo-rutas.csv",
+      "collection_timestamp_utc": "2024-01-15T12:00:00Z",
+      "source_published_at": "2024-01-10T08:00:00",
+      "license_declared": "No aplica: fixture sintético sin datos oficiales",
+      "license_published": "Ver data/demo/README.md (declaración de reutilización del fixture)",
+      "license_id": "synthetic-fixture",
+      "license_url": "https://demo.invalid/licenses/synthetic-fixture",
+      "attribution": "Autores del repositorio (fixture sintético, no datos oficiales)",
+      "content_hash": "cafecafecafecafecafecafecafecafecafecafecafecafecafecafecafecafe",
+      "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json",
+      "row_count": 4,
+      "status": "success",
+      "schema_version": 1,
+      "resource_cutoff": {
+        "description": "Fixture sintético de rutas (ficticio)",
+        "created": "2024-01-10T09:00:00",
+        "last_modified": "2024-01-10T10:00:00",
+        "metadata_modified": "2024-01-10T11:00:00"
+      },
+      "retrieval_method": "autoría propia (fixture sintético, sin red)",
+      "warnings": ["fixture sintético: valores ficticios, no oficiales"],
+      "notes": "Synthetic demo snapshot; not an official capture."
+    },
+    {
+      "snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+      "source_id": "demo-source-stops",
+      "dataset_id": "paradas-de-transporte-publico",
+      "source_url": "https://demo.invalid/datasets/paradas",
+      "resource_id": "22222222-2222-4222-8222-222222222222",
+      "resource_name": "DEMO-ParadasSinteticas-2024Enero.csv",
+      "resource_format": "CSV",
+      "resource_url": "https://demo.invalid/resources/demo-paradas.csv",
+      "collection_timestamp_utc": "2024-01-15T12:00:00Z",
+      "source_published_at": "2024-01-10T08:00:00",
+      "license_declared": "No aplica: fixture sintético sin datos oficiales",
+      "license_published": "Ver data/demo/README.md (declaración de reutilización del fixture)",
+      "license_id": "synthetic-fixture",
+      "license_url": "https://demo.invalid/licenses/synthetic-fixture",
+      "attribution": "Autores del repositorio (fixture sintético, no datos oficiales)",
+      "content_hash": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+      "raw_file": "paradas-de-transporte-publico/DEMO-2024-01-15.json",
+      "row_count": 4,
+      "status": "success",
+      "schema_version": 1,
+      "resource_cutoff": {
+        "description": "Fixture sintético de paradas (ficticio)",
+        "created": "2024-01-10T09:00:00",
+        "last_modified": "2024-01-10T10:00:00",
+        "metadata_modified": "2024-01-10T11:00:00"
+      },
+      "retrieval_method": "autoría propia (fixture sintético, sin red)",
+      "warnings": ["fixture sintético: valores ficticios, no oficiales"],
+      "notes": "Synthetic demo snapshot; not an official capture."
+    }
+  ],
+  "mobility_network": [
+    {
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00001",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "element_type": "route",
+      "route_line": "DEMO-01",
+      "company": "Operador sintético",
+      "direction": "IDA",
+      "origin": "TERMINAL DEMO NORTE",
+      "destination": "PARQUE DEMO SUR",
+      "raw": {
+        "LINEA": "DEMO-01",
+        "COMPANIA": "Operador sintético",
+        "SENTIDO": "IDA",
+        "ORIGEN": "TERMINAL DEMO NORTE",
+        "DESTINO": "PARQUE DEMO SUR",
+        "LUNES_VIERNES_INICIO": "6:00",
+        "LUNES_VIERNES_FIN": "20:00",
+        "LUNES_VIERNES_INTERVALO": "0:15",
+        "SABADOS_INICIO": "7:00",
+        "SABADOS_FIN": "19:00",
+        "SABADOS_INTERVALO": "0:20",
+        "DOMINGOS_INICIO": "8:00",
+        "DOMINGOS_FIN": "18:00",
+        "DOMINGOS_INTERVALO": "0:30"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00002",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "element_type": "route",
+      "route_line": "DEMO-01",
+      "company": "Operador sintético",
+      "direction": "RETORNO",
+      "origin": "PARQUE DEMO SUR",
+      "destination": "TERMINAL DEMO NORTE",
+      "raw": {
+        "LINEA": "DEMO-01",
+        "COMPANIA": "Operador sintético",
+        "SENTIDO": "RETORNO",
+        "ORIGEN": "PARQUE DEMO SUR",
+        "DESTINO": "TERMINAL DEMO NORTE",
+        "LUNES_VIERNES_INICIO": "6:15",
+        "LUNES_VIERNES_FIN": "20:15",
+        "LUNES_VIERNES_INTERVALO": "0:15",
+        "SABADOS_INICIO": "7:15",
+        "SABADOS_FIN": "19:15",
+        "SABADOS_INTERVALO": "0:20",
+        "DOMINGOS_INICIO": "8:15",
+        "DOMINGOS_FIN": "18:15",
+        "DOMINGOS_INTERVALO": "0:30"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00003",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "element_type": "route",
+      "route_line": "DEMO-02",
+      "company": "Líneas Sintéticas SA",
+      "direction": "IDA",
+      "origin": "CENTRO DEMO",
+      "destination": "FERIAL DEMO",
+      "raw": {
+        "LINEA": "DEMO-02",
+        "COMPANIA": "Líneas Sintéticas SA",
+        "SENTIDO": "IDA",
+        "ORIGEN": "CENTRO DEMO",
+        "DESTINO": "FERIAL DEMO",
+        "LUNES_VIERNES_INICIO": "5:30",
+        "LUNES_VIERNES_FIN": "22:00",
+        "LUNES_VIERNES_INTERVALO": "0:10",
+        "SABADOS_INICIO": "6:00",
+        "SABADOS_FIN": "21:00",
+        "SABADOS_INTERVALO": "0:12",
+        "DOMINGOS_INICIO": "0:00",
+        "DOMINGOS_FIN": "0:00",
+        "DOMINGOS_INTERVALO": "0:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00004",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "element_type": "route",
+      "route_line": "DEMO-03",
+      "company": "Operador sintético",
+      "direction": "IDA",
+      "origin": "MERCADO DEMO",
+      "destination": "UNIVERSIDAD DEMO",
+      "raw": {
+        "LINEA": "DEMO-03",
+        "COMPANIA": "Operador sintético",
+        "SENTIDO": "IDA",
+        "ORIGEN": "MERCADO DEMO",
+        "DESTINO": "UNIVERSIDAD DEMO",
+        "LUNES_VIERNES_INICIO": "6:30",
+        "LUNES_VIERNES_FIN": "21:30",
+        "LUNES_VIERNES_INTERVALO": "0:20",
+        "SABADOS_INICIO": "0:00",
+        "SABADOS_FIN": "0:00",
+        "SABADOS_INTERVALO": "0:00",
+        "DOMINGOS_INICIO": "0:00",
+        "DOMINGOS_FIN": "0:00",
+        "DOMINGOS_INTERVALO": "0:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "network_id": "demo-paradas@2024-01-15T12:00:00Z::stop:00001",
+      "snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+      "element_type": "stop",
+      "stop_id": "S-DEMO-01",
+      "stop_name": "PARADA DEMO PLAZA CENTRAL",
+      "palette": "SI",
+      "latitude": null,
+      "longitude": null,
+      "geometry": null,
+      "raw": {
+        "N": "S-DEMO-01",
+        "Ubicacion": "PARADA DEMO PLAZA CENTRAL",
+        "Latitud": "-2.900.123",
+        "Longitud": "-79.005.678",
+        "Paleta": "SI"
+      },
+      "quality_flags": [
+        {"field": "Latitud", "flag": "syntax_invalid", "value": "-2.900.123"},
+        {"field": "Longitud", "flag": "syntax_invalid", "value": "-79.005.678"}
+      ],
+      "provenance": {
+        "source_snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-stops",
+        "dataset_id": "paradas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/paradas",
+        "resource_id": "22222222-2222-4222-8222-222222222222",
+        "raw_file": "paradas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "network_id": "demo-paradas@2024-01-15T12:00:00Z::stop:00002",
+      "snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+      "element_type": "stop",
+      "stop_id": "S-DEMO-02",
+      "stop_name": "PARADA DEMO MERCADO",
+      "palette": "NO",
+      "latitude": null,
+      "longitude": null,
+      "geometry": null,
+      "raw": {
+        "N": "S-DEMO-02",
+        "Ubicacion": "PARADA DEMO MERCADO",
+        "Latitud": "-2.905.555",
+        "Longitud": "-79.010.111",
+        "Paleta": "NO"
+      },
+      "quality_flags": [
+        {"field": "Latitud", "flag": "syntax_invalid", "value": "-2.905.555"},
+        {"field": "Longitud", "flag": "syntax_invalid", "value": "-79.010.111"}
+      ],
+      "provenance": {
+        "source_snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-stops",
+        "dataset_id": "paradas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/paradas",
+        "resource_id": "22222222-2222-4222-8222-222222222222",
+        "raw_file": "paradas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "network_id": "demo-paradas@2024-01-15T12:00:00Z::stop:00003",
+      "snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+      "element_type": "stop",
+      "stop_id": "S-DEMO-03",
+      "stop_name": "PARADA DEMO NORTE",
+      "palette": "SI",
+      "latitude": null,
+      "longitude": null,
+      "geometry": null,
+      "raw": {
+        "N": "S-DEMO-03",
+        "Ubicacion": "PARADA DEMO NORTE",
+        "Latitud": "-95.123",
+        "Longitud": "-790.456",
+        "Paleta": "SI"
+      },
+      "quality_flags": [
+        {"field": "Latitud", "flag": "out_of_range", "value": "-95.123"},
+        {"field": "Longitud", "flag": "out_of_range", "value": "-790.456"}
+      ],
+      "provenance": {
+        "source_snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-stops",
+        "dataset_id": "paradas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/paradas",
+        "resource_id": "22222222-2222-4222-8222-222222222222",
+        "raw_file": "paradas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "network_id": "demo-paradas@2024-01-15T12:00:00Z::stop:00004",
+      "snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+      "element_type": "stop",
+      "stop_id": "S-DEMO-04",
+      "stop_name": "PARADA DEMO SUR",
+      "palette": "NO",
+      "latitude": null,
+      "longitude": null,
+      "geometry": null,
+      "raw": {
+        "N": "S-DEMO-04",
+        "Ubicacion": "PARADA DEMO SUR",
+        "Latitud": "-2.901.444",
+        "Longitud": "-79.011.222",
+        "Paleta": "NO"
+      },
+      "quality_flags": [
+        {"field": "Latitud", "flag": "syntax_invalid", "value": "-2.901.444"},
+        {"field": "Longitud", "flag": "syntax_invalid", "value": "-79.011.222"}
+      ],
+      "provenance": {
+        "source_snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-stops",
+        "dataset_id": "paradas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/paradas",
+        "resource_id": "22222222-2222-4222-8222-222222222222",
+        "raw_file": "paradas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    }
+  ],
+  "planned_service": [
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00001:weekday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00001",
+      "route_line": "DEMO-01",
+      "direction": "IDA",
+      "day_type": "weekday",
+      "planned_start": 360,
+      "planned_end": 1200,
+      "planned_headway": 15,
+      "planned_start_raw": "6:00",
+      "planned_end_raw": "20:00",
+      "planned_headway_raw": "0:15",
+      "service_status": "active",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00001:saturday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00001",
+      "route_line": "DEMO-01",
+      "direction": "IDA",
+      "day_type": "saturday",
+      "planned_start": 420,
+      "planned_end": 1140,
+      "planned_headway": 20,
+      "planned_start_raw": "7:00",
+      "planned_end_raw": "19:00",
+      "planned_headway_raw": "0:20",
+      "service_status": "active",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00001:sunday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00001",
+      "route_line": "DEMO-01",
+      "direction": "IDA",
+      "day_type": "sunday",
+      "planned_start": 480,
+      "planned_end": 1080,
+      "planned_headway": 30,
+      "planned_start_raw": "8:00",
+      "planned_end_raw": "18:00",
+      "planned_headway_raw": "0:30",
+      "service_status": "active",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00002:weekday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00002",
+      "route_line": "DEMO-01",
+      "direction": "RETORNO",
+      "day_type": "weekday",
+      "planned_start": 375,
+      "planned_end": 1215,
+      "planned_headway": 15,
+      "planned_start_raw": "6:15",
+      "planned_end_raw": "20:15",
+      "planned_headway_raw": "0:15",
+      "service_status": "active",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00002:saturday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00002",
+      "route_line": "DEMO-01",
+      "direction": "RETORNO",
+      "day_type": "saturday",
+      "planned_start": 435,
+      "planned_end": 1155,
+      "planned_headway": 20,
+      "planned_start_raw": "7:15",
+      "planned_end_raw": "19:15",
+      "planned_headway_raw": "0:20",
+      "service_status": "active",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00002:sunday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00002",
+      "route_line": "DEMO-01",
+      "direction": "RETORNO",
+      "day_type": "sunday",
+      "planned_start": 495,
+      "planned_end": 1095,
+      "planned_headway": 30,
+      "planned_start_raw": "8:15",
+      "planned_end_raw": "18:15",
+      "planned_headway_raw": "0:30",
+      "service_status": "active",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00003:weekday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00003",
+      "route_line": "DEMO-02",
+      "direction": "IDA",
+      "day_type": "weekday",
+      "planned_start": 330,
+      "planned_end": 1320,
+      "planned_headway": 10,
+      "planned_start_raw": "5:30",
+      "planned_end_raw": "22:00",
+      "planned_headway_raw": "0:10",
+      "service_status": "active",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00003:saturday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00003",
+      "route_line": "DEMO-02",
+      "direction": "IDA",
+      "day_type": "saturday",
+      "planned_start": 360,
+      "planned_end": 1260,
+      "planned_headway": 12,
+      "planned_start_raw": "6:00",
+      "planned_end_raw": "21:00",
+      "planned_headway_raw": "0:12",
+      "service_status": "active",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00003:sunday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00003",
+      "route_line": "DEMO-02",
+      "direction": "IDA",
+      "day_type": "sunday",
+      "planned_start": 0,
+      "planned_end": 0,
+      "planned_headway": 0,
+      "planned_start_raw": "0:00",
+      "planned_end_raw": "0:00",
+      "planned_headway_raw": "0:00",
+      "service_status": "no_service",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00004:weekday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00004",
+      "route_line": "DEMO-03",
+      "direction": "IDA",
+      "day_type": "weekday",
+      "planned_start": 390,
+      "planned_end": 1290,
+      "planned_headway": 20,
+      "planned_start_raw": "6:30",
+      "planned_end_raw": "21:30",
+      "planned_headway_raw": "0:20",
+      "service_status": "active",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00004:saturday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00004",
+      "route_line": "DEMO-03",
+      "direction": "IDA",
+      "day_type": "saturday",
+      "planned_start": 0,
+      "planned_end": 0,
+      "planned_headway": 0,
+      "planned_start_raw": "0:00",
+      "planned_end_raw": "0:00",
+      "planned_headway_raw": "0:00",
+      "service_status": "no_service",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    },
+    {
+      "service_id": "demo-rutas@2024-01-15T12:00:00Z::route:00004:sunday",
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "network_id": "demo-rutas@2024-01-15T12:00:00Z::route:00004",
+      "route_line": "DEMO-03",
+      "direction": "IDA",
+      "day_type": "sunday",
+      "planned_start": 0,
+      "planned_end": 0,
+      "planned_headway": 0,
+      "planned_start_raw": "0:00",
+      "planned_end_raw": "0:00",
+      "planned_headway_raw": "0:00",
+      "service_status": "no_service",
+      "service_date": null,
+      "snapshot_cutoff": {
+        "resource_name": "DEMO-RutasSinteticas-2024Enero.csv",
+        "resource_description": "Fixture sintético de rutas (ficticio)",
+        "resource_created": "2024-01-10T09:00:00",
+        "resource_last_modified": "2024-01-10T10:00:00",
+        "resource_metadata_modified": "2024-01-10T11:00:00"
+      },
+      "quality_flags": [],
+      "provenance": {
+        "source_snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "source_id": "demo-source-routes",
+        "dataset_id": "rutas-de-transporte-publico",
+        "source_url": "https://demo.invalid/datasets/rutas",
+        "resource_id": "11111111-1111-4111-8111-111111111111",
+        "raw_file": "rutas-de-transporte-publico/DEMO-2024-01-15.json"
+      }
+    }
+  ],
+  "quality_reports": [
+    {
+      "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+      "dataset_id": "rutas-de-transporte-publico",
+      "resource_id": "11111111-1111-4111-8111-111111111111",
+      "row_count": 4,
+      "expected_row_count": null,
+      "row_count_matches_expected": null,
+      "missing_fields": {},
+      "duplicates": {
+        "full_row": {"duplicated_keys": 0, "duplicate_rows": 0},
+        "natural_key": {
+          "duplicated_keys": 0,
+          "duplicate_rows": 0,
+          "key_fields": ["LINEA", "COMPANIA", "SENTIDO", "ORIGEN", "DESTINO"]
+        }
+      },
+      "sentido": {"allowed": ["IDA", "RETORNO"], "unknown_count": 0},
+      "coordinates": null,
+      "schedule": {
+        "cells_total": 36,
+        "cells_malformed": 0,
+        "cells_over_24h": 0,
+        "active_windows_total": 12,
+        "active_windows_invalid": 0,
+        "interval_cells_total": 12,
+        "interval_cells_invalid": 0,
+        "no_service_windows_count": 3
+      },
+      "no_service_windows": [
+        {"route_line": "DEMO-02", "direction": "IDA", "day_type": "sunday"},
+        {"route_line": "DEMO-03", "direction": "IDA", "day_type": "saturday"},
+        {"route_line": "DEMO-03", "direction": "IDA", "day_type": "sunday"}
+      ],
+      "coverage": {"elements_total": 4, "elements_clean": 4},
+      "warnings": ["fixture sintético: todos los valores son ficticios"],
+      "errors": []
+    },
+    {
+      "snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+      "dataset_id": "paradas-de-transporte-publico",
+      "resource_id": "22222222-2222-4222-8222-222222222222",
+      "row_count": 4,
+      "expected_row_count": null,
+      "row_count_matches_expected": null,
+      "missing_fields": {},
+      "duplicates": {
+        "full_row": {"duplicated_keys": 0, "duplicate_rows": 0},
+        "natural_key": {
+          "duplicated_keys": 0,
+          "duplicate_rows": 0,
+          "key_fields": ["N"]
+        }
+      },
+      "sentido": null,
+      "coordinates": {
+        "latitude": {"syntax_invalid": 3, "out_of_range": 1, "valid": 0},
+        "longitude": {"syntax_invalid": 3, "out_of_range": 1, "valid": 0},
+        "rows_with_both_valid": 0,
+        "valid_point_coverage": 0.0
+      },
+      "schedule": null,
+      "no_service_windows": [],
+      "coverage": {"elements_total": 4, "elements_clean": 0},
+      "warnings": ["fixture sintético: coordenadas ficticias sin resolver"],
+      "errors": []
+    }
+  ],
+  "transformation": {
+    "name": "synthetic-demo-fixture",
+    "schema_version": 1,
+    "notes": "Canonical-shaped synthetic fixture authored from scratch; not produced by running the real transformation on official captures."
+  },
+  "fixture": {
+    "name": "synthetic-combined",
+    "synthetic": true,
+    "version": 1,
+    "authored_date": "2026-08-02",
+    "authored_by": "Autores del repositorio",
+    "origin": "Fixture canónico creado desde cero (autoría propia). No se deriva de capturas oficiales, de tests ni de archivos raw; todos los IDs, nombres, horarios y coordenadas son ficticios.",
+    "snapshots": [
+      {
+        "dataset_id": "rutas-de-transporte-publico",
+        "snapshot_id": "demo-rutas@2024-01-15T12:00:00Z",
+        "row_count": 4
+      },
+      {
+        "dataset_id": "paradas-de-transporte-publico",
+        "snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+        "row_count": 4
+      }
+    ],
+    "limitations": [
+      "Servicio planificado únicamente",
+      "Sin puntualidad ni tiempo real",
+      "Sin cobertura geográfica",
+      "Sin mapa"
+    ],
+    "readme": "data/demo/README.md"
+  },
+  "coordinate_audit": {
+    "name": "coordinate-format-audit",
+    "schema_version": 1,
+    "snapshot_id": "demo-paradas@2024-01-15T12:00:00Z",
+    "dataset_id": "paradas-de-transporte-publico",
+    "resource_id": "22222222-2222-4222-8222-222222222222",
+    "raw_file": "paradas-de-transporte-publico/DEMO-2024-01-15.json",
+    "raw_sha256": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+    "row_count": 4,
+    "columns_audited": ["Latitud", "Longitud"],
+    "total_coordinate_values": 8,
+    "rows_with_any_nonblank": 4,
+    "rows_with_both_nonblank": 4,
+    "per_column_counts": {
+      "Latitud": {
+        "blank": 0,
+        "sentinel": 0,
+        "decimal_candidate": 1,
+        "decimal_comma_candidate": 0,
+        "thousands_separator_candidate": 3,
+        "dms_candidate": 0,
+        "wkt_or_geometry_candidate": 0,
+        "other_text": 0,
+        "unknown": 0
+      },
+      "Longitud": {
+        "blank": 0,
+        "sentinel": 0,
+        "decimal_candidate": 1,
+        "decimal_comma_candidate": 0,
+        "thousands_separator_candidate": 3,
+        "dms_candidate": 0,
+        "wkt_or_geometry_candidate": 0,
+        "other_text": 0,
+        "unknown": 0
+      }
+    },
+    "format_resolved": false,
+    "decision": "format_unresolved",
+    "conversion_justified": false,
+    "geometry_generated": false,
+    "methodology": "Espejo sintético de la clasificación textual de la auditoría real; todos los valores de ejemplo son ficticios y la decisión es la misma: no convertir ni generar geometría.",
+    "evidence": {
+      "fields_audited": ["Latitud", "Longitud"],
+      "local_evidence_paths": ["data/demo/synthetic-combined.json", "data/demo/README.md"],
+      "notes": ["Valores ficticios: no hay evidencia oficial detrás de este payload."]
+    },
+    "examples": {
+      "Latitud": {
+        "decimal_candidate": [
+          {"row": 3, "value": "-95.123"}
+        ],
+        "thousands_separator_candidate": [
+          {"row": 1, "value": "-2.900.123"},
+          {"row": 2, "value": "-2.905.555"},
+          {"row": 4, "value": "-2.901.444"}
+        ]
+      },
+      "Longitud": {
+        "decimal_candidate": [
+          {"row": 3, "value": "-790.456"}
+        ],
+        "thousands_separator_candidate": [
+          {"row": 1, "value": "-79.005.678"},
+          {"row": 2, "value": "-79.010.111"},
+          {"row": 4, "value": "-79.011.222"}
+        ]
+      }
+    },
+    "recommendation": "No convertir, reordenar, reproyectar ni construir geometría a partir de Latitud/Longitud. Este payload es sintético y replica la decisión format_unresolved solo con fines de demostración."
+  }
+}
