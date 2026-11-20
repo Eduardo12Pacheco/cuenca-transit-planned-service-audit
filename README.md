@@ -1,5 +1,11 @@
 # Auditoría del servicio planificado de transporte público de Cuenca
 
+`cuenca-transit-planned-service-audit` · [![CI](https://github.com/Eduardo12Pacheco/cuenca-transit-planned-service-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/Eduardo12Pacheco/cuenca-transit-planned-service-audit/actions/workflows/ci.yml)
+
+> **TL;DR (English)** — reproducible audit of Cuenca's **planned** public transit service (not real-time performance), built from two approved CKAN snapshots with strict manifest/hash validation and a read-only Streamlit demo.
+> **Key result:** 76 routes and 383 stops audited; 68/76 route rows clean; 0 simultaneously valid coordinate pairs, so no map is produced.
+> **Quickstart:** `uv sync --extra demo` · `uv run --extra demo streamlit run app/streamlit_app.py` · `uv run pytest`
+
 > Una auditoría reproducible del servicio **planificado** de transporte público de Cuenca, construida solo con los dos snapshots aprobados de Cuenca en Datos (rutas y paradas): validación estricta contra manifiestos, transformación canónica `planned_service` y una demo local de solo lectura. **Este proyecto NO mide retrasos reales, puntualidad ni frecuencia observada, y NO produce mapa.**
 
 **Estado:** `planned-service-audit` · `demo-ready` · `portfolio-ready` — las métricas describen dos snapshots aprobados (rutas y paradas); el análisis geográfico y meteorológico son trabajo futuro, no implementado.
@@ -50,14 +56,14 @@ flowchart LR
 ## Ejecutar la demo
 
 ```bash
-UV_OFFLINE=1 uv sync --extra demo        # instala streamlit desde la caché local, sin red
+uv sync --extra demo
 uv run --extra demo streamlit run app/streamlit_app.py
 ```
 
 - **Modo evidencia real:** ambos raws aprobados presentes en `data/raw/` → snapshots exactos, hashes inmutables y auditoría real.
 - **Modo demostración (sintético):** checkout limpio sin raws → valores ficticios etiquetados de forma prominente como no oficiales; nunca se muestran hashes, IDs de recurso ni licencias reales.
 - Evidencia parcial, malformada o inválida → cartel de error claro, **sin respaldo sintético**.
-- Suite: `uv run pytest` (252 casos; los tests AppTest requieren el extra `demo`).
+- Suite: `uv run pytest` (los tests AppTest requieren el extra `demo`).
 - Recorrido de 60–90 segundos: [`docs/demo-script.md`](docs/demo-script.md). Fixture y su reutilización: [`data/demo/README.md`](data/demo/README.md).
 
 ### Vistas de la demo (modo evidencia real)
@@ -124,6 +130,6 @@ Artefactos versionados: `data/manifests/` (manifiestos + sidecar de corrección)
 
 ## Licencia
 
-**Código del repositorio.** MIT (ver `LICENSE`).
+**Código del repositorio.** MIT (ver `LICENSE`). The MIT license applies only to the original code authored in this repository; third-party data, raw captures, manifests, datasets, fixtures, source citations, and other external content are not covered and retain their own documented terms.
 
 **Datos y contenido de terceros.** Los datos fuente, capturas raw, manifests, fixtures y demás contenido externo no quedan cubiertos por MIT: conservan sus términos independientes documentados (ver `docs/source-contract.md`; licencia declarada CC BY-NC 2.0) y no se otorga ningún derecho implícito sobre material de terceros. Las afirmaciones de licencia son registros técnicos de compatibilidad, no asesoramiento legal.
