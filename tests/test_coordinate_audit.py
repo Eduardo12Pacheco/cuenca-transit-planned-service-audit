@@ -47,6 +47,10 @@ import json
 from pathlib import Path
 
 import pytest
+from capture_fixtures import (
+    STOPS_DATASET_ID,
+    write_snapshot,
+)
 
 from mobility_reliability.quality import (
     COORDINATE_CATEGORIES,
@@ -60,11 +64,6 @@ from mobility_reliability.quality import (
 )
 from mobility_reliability.validation import SnapshotValidationError
 
-from capture_fixtures import (
-    STOPS_DATASET_ID,
-    write_snapshot,
-)
-
 STOPS_RESOURCE_ID = "ed2f1b0f-73e5-4a59-acb4-394f8ec36d7e"
 STOPS_RESOURCE_NAME = "GADCuenca_ParadasTransporte_2025Abril.csv"
 
@@ -76,7 +75,7 @@ AUDIT_STOPS_RAW = (
     "N,Ubicacion,Latitud,Longitud,Paleta\n"
     "1,PLACE A,-2.895.956,-79.014.574,SI\n"
     "2,PLACE B,-28.957,-79.0,SI\n"
-    "3,PLACE C,?,\"-2,895956\",SI\n"  # el valor con coma está entrecomillado en CSV
+    '3,PLACE C,?,"-2,895956",SI\n'  # el valor con coma está entrecomillado en CSV
     "4,PLACE D,-2.895.956,-79.014.574,SI\n"
     "5,PLACE E,  -2.895.956  ,-79.014.574,SI\n"
 )
@@ -124,7 +123,7 @@ def _audit(tmp_path, raw_text: str = AUDIT_STOPS_RAW, **write_kwargs) -> dict:
         ("2,895,956", "thousands_separator_candidate"),
         ("-2.895,956", "thousands_separator_candidate"),
         # marcadores DMS obvios (símbolo de grado o letra de hemisferio final)
-        ('2°53\'45.6"S', "dms_candidate"),
+        ("2°53'45.6\"S", "dms_candidate"),
         ("79°W", "dms_candidate"),
         ("-79.014.574W", "dms_candidate"),
         # texto obvio de WKT/geometría gana sobre contenido de apariencia numérica
@@ -148,10 +147,31 @@ def test_clasificador_asigna_cada_categoria_de_forma_determinista(value, expecte
 
 def test_clasificador_solo_emite_categorias_documentadas_en_una_bateria():
     battery = [
-        "", "   ", "?", " ? ", "-28.957", "-79.0", "0", "-2,895956", "1,5",
-        "-2.895.956", "-79.014.574", "2,895,956", '2°53\'45.6"S', "79°W",
-        "POINT(-79.014574 -2.895956)", "SRID=4326;POINT(0 0)", "no disponible",
-        "N/A", "---", "???", "12..34", "-2.89.956", "x", "1.2.3", "1,2,3",
+        "",
+        "   ",
+        "?",
+        " ? ",
+        "-28.957",
+        "-79.0",
+        "0",
+        "-2,895956",
+        "1,5",
+        "-2.895.956",
+        "-79.014.574",
+        "2,895,956",
+        "2°53'45.6\"S",
+        "79°W",
+        "POINT(-79.014574 -2.895956)",
+        "SRID=4326;POINT(0 0)",
+        "no disponible",
+        "N/A",
+        "---",
+        "???",
+        "12..34",
+        "-2.89.956",
+        "x",
+        "1.2.3",
+        "1,2,3",
     ]
     results = {classify_coordinate_value(value) for value in battery}
     assert results <= set(COORDINATE_CATEGORIES)
@@ -247,9 +267,7 @@ def test_auditoria_ejemplos_preservan_valores_raw_exactos_con_numeros_de_fila(tm
     }
     # El centinela '?' se registra como ejemplo centinela, nunca como coordenada.
     assert audit["examples"]["Latitud"]["sentinel"] == [{"row": 3, "value": "?"}]
-    assert audit["examples"]["Longitud"]["decimal_comma_candidate"] == [
-        {"row": 3, "value": "-2,895956"}
-    ]
+    assert audit["examples"]["Longitud"]["decimal_comma_candidate"] == [{"row": 3, "value": "-2,895956"}]
 
 
 def test_ejemplos_limitados_a_20_y_nunca_incluyen_el_raw_completo(tmp_path):
@@ -335,9 +353,7 @@ def test_auditoria_evidencia_registra_todas_las_rutas_de_evidencia_local_y_campo
     ):
         assert expected in paths
     # Las rutas del manifest y del raw se registran como se proveen.
-    assert paths[0].endswith(
-        f"manifests/{STOPS_DATASET_ID}/2026-08-02T19-27-36Z.manifest.json"
-    )
+    assert paths[0].endswith(f"manifests/{STOPS_DATASET_ID}/2026-08-02T19-27-36Z.manifest.json")
     assert paths[1].endswith(audit["raw_file"])
 
     # Los campos de metadatos del manifest/resource inspeccionados por la
@@ -486,9 +502,7 @@ def test_escritor_emite_json_y_markdown_validos_en_utf8(tmp_path):
 # ---------------------------------------------------------------------------
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-STOPS_MANIFEST = (
-    REPO_ROOT / "data/manifests/paradas-de-transporte-publico/2026-08-02T19-27-36Z.manifest.json"
-)
+STOPS_MANIFEST = REPO_ROOT / "data/manifests/paradas-de-transporte-publico/2026-08-02T19-27-36Z.manifest.json"
 STOPS_RAW = REPO_ROOT / "data/raw/paradas-de-transporte-publico/2026-08-02T19-27-36Z.json"
 RAW_DIR = REPO_ROOT / "data/raw"
 
@@ -586,19 +600,9 @@ def test_auditoria_de_formato_de_coordenadas_de_paradas_sobre_el_raw_capturado()
     assert "src/mobility_reliability/transformation/snapshot.py" in evidence_paths
     assert all(not path.startswith("/") for path in evidence_paths[2:])
 
-
-@requires_stops_raw
-def test_ejemplos_de_la_auditoria_capturada_limitados_y_sin_el_raw_completo():
-    audit = audit_coordinate_formats(STOPS_MANIFEST, RAW_DIR)
-
-    for column_examples in audit["examples"].values():
-        for category_examples in column_examples.values():
-            assert len(category_examples) <= 20
-
     # Los 331 valores de lat de miles agrupados conservan solo las primeras 20
-    # filas (las filas 10 y 18 son candidatos decimales y no consumen lugares).
-    lat_thousands = audit["examples"]["Latitud"]["thousands_separator_candidate"]
-    assert len(lat_thousands) == 20
+    # filas en el artefacto (las filas 10 y 18 son candidatos decimales y no
+    # consumen lugares). El valor 21 nunca se filtra.
     rows = list(csv.reader(io.StringIO(STOPS_RAW.read_text(encoding="utf-8"))))
     data_rows = rows[1:]
     thousands_rows = [
@@ -608,10 +612,24 @@ def test_ejemplos_de_la_auditoria_capturada_limitados_y_sin_el_raw_completo():
     ]
     assert len(thousands_rows) == 331
     assert [example["row"] for example in lat_thousands] == thousands_rows[:20]
-    assert lat_thousands[-1]["row"] == thousands_rows[19]
-
-    # El valor 21 de miles agrupados nunca se filtra al artefacto.
     beyond_cap = data_rows[thousands_rows[20] - 1][2]
     dumped = json.dumps(audit)
     assert beyond_cap not in dumped
     assert STOPS_RAW.read_text(encoding="utf-8") not in dumped
+
+
+def test_ejemplos_de_la_auditoria_versionada_limitados_y_sin_el_raw_completo():
+    # El artefacto versionado se valida sin los raws (git-ignored): conserva
+    # como máximo 20 ejemplos por categoría y nunca el raw completo.
+    audit = json.loads((REPO_ROOT / "data/quality/coordinate-format-audit.json").read_text(encoding="utf-8"))
+
+    for column_examples in audit["examples"].values():
+        for category_examples in column_examples.values():
+            assert len(category_examples) <= 20
+
+    lat_thousands = audit["examples"]["Latitud"]["thousands_separator_candidate"]
+    assert len(lat_thousands) == 20
+    assert [example["row"] for example in lat_thousands[:3]] == [1, 2, 3]
+    assert lat_thousands[-1]["row"] == 22
+    dumped = json.dumps(audit)
+    assert len(dumped) < 100_000
