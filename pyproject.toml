@@ -1,15 +1,13 @@
 [project]
-name = "mobility-reliability"
+name = "cuenca-transit-planned-service-audit"
 version = "0.1.0"
-description = "Auditoría del servicio planificado de transporte público de Cuenca (recopilación de snapshots CKAN de rutas/paradas)"
+description = "Reproducible audit of Cuenca's planned public transit service using approved CKAN route and stop snapshots."
 requires-python = ">=3.11"
 dependencies = []
 
 [project.optional-dependencies]
-# Demo local opcional sin conexión. Fijada a la versión disponible en la
-# caché local de uv para que `UV_OFFLINE=1 uv sync --extra demo` nunca
-# necesite la red. La demo es una app de Streamlit de solo lectura; no es
-# parte de la instalación base.
+# Optional local demo (read-only Streamlit app). Pinned so the demo extra
+# resolves deterministically; it is not part of the base installation.
 demo = [
     "streamlit==1.60.0",
 ]
@@ -17,6 +15,7 @@ demo = [
 [dependency-groups]
 dev = [
     "pytest>=8.0",
+    "ruff>=0.9",
 ]
 
 [build-system]
@@ -29,3 +28,14 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src", "."]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# The renderer embeds long SVG attribute strings by design.
+"scripts/render_p2_coordinate_quality.py" = ["E501"]
