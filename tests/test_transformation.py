@@ -43,18 +43,19 @@ import json
 from pathlib import Path
 
 import pytest
-
 from capture_fixtures import (
     ROUTES_DATASET_ID,
     STOPS_DATASET_ID,
     write_snapshot,
 )
+
 from mobility_reliability.transformation import (
     KNOWN_EXPECTED_ROW_COUNTS,
     transform_captures,
     transform_snapshot,
 )
 from mobility_reliability.validation import SnapshotValidationError
+
 ROUTES_RESOURCE_ID = "e55af215-4648-4e3b-84c9-d7e929435008"
 STOPS_RESOURCE_ID = "ed2f1b0f-73e5-4a59-acb4-394f8ec36d7e"
 
@@ -526,11 +527,7 @@ def test_las_familias_de_columnas_por_tipo_de_dia_mapean_a_valores_canonicos(tmp
     )
 
     result = snapshot_for(tmp_path, ROUTES_DATASET_ID)
-    by_day = {
-        record["day_type"]: record
-        for record in result["planned_service"]
-        if record["route_line"] == "1"
-    }
+    by_day = {record["day_type"]: record for record in result["planned_service"] if record["route_line"] == "1"}
     assert set(by_day) == {"weekday", "saturday", "sunday"}
 
     # LUNES_VIERNES_INICIO/FIN/INTERVALO -> weekday (texto raw y minutos tipados).
@@ -575,9 +572,7 @@ def test_las_familias_de_columnas_por_tipo_de_dia_mapean_a_valores_canonicos(tmp
 
 
 def test_transform_captures_combina_ambos_snapshots(tmp_path):
-    combined = transform_captures(
-        routes_capture(tmp_path), stops_capture(tmp_path), tmp_path / "raw"
-    )
+    combined = transform_captures(routes_capture(tmp_path), stops_capture(tmp_path), tmp_path / "raw")
 
     assert len(combined["source_snapshots"]) == 2
     assert {s["dataset_id"] for s in combined["source_snapshots"]} == {

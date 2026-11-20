@@ -31,19 +31,16 @@ from pathlib import Path
 
 import pytest
 
-streamlit = pytest.importorskip(
-    "streamlit", reason="requiere el extra opcional 'demo' (streamlit)"
-)
+streamlit = pytest.importorskip("streamlit", reason="requiere el extra opcional 'demo' (streamlit)")
 from streamlit.testing.v1 import AppTest  # noqa: E402
 
 from app import _data as data  # noqa: E402
 
 APP_PATH = Path(__file__).resolve().parents[1] / "app/streamlit_app.py"
 
-REAL_RAWS_PRESENT = (
-    (data.RAW_DIR / "rutas-de-transporte-publico/2026-08-02T18-51-08Z.json").is_file()
-    and (data.RAW_DIR / "paradas-de-transporte-publico/2026-08-02T19-27-36Z.json").is_file()
-)
+REAL_RAWS_PRESENT = (data.RAW_DIR / "rutas-de-transporte-publico/2026-08-02T18-51-08Z.json").is_file() and (
+    data.RAW_DIR / "paradas-de-transporte-publico/2026-08-02T19-27-36Z.json"
+).is_file()
 
 REQUIRES_REAL_RAWS = pytest.mark.skipif(
     not REAL_RAWS_PRESENT,
@@ -86,9 +83,7 @@ def test_app_inicia_con_capturas_reales_y_muestra_evidencia_fijada():
     assert "Esta demo muestra únicamente servicio planificado." in text
     assert "GTFS-Realtime, AVL ni cobertura geográfica." in text
     assert "No se muestra un mapa porque el formato de las coordenadas," in text
-    assert (
-        "el orden de los ejes y el sistema de referencia CRS no están resueltos." in text
-    )
+    assert "el orden de los ejes y el sistema de referencia CRS no están resueltos." in text
     # Los hashes de provenance de ambos snapshots son visibles (etiquetas de evidencia).
     assert "dc3082ad1312e7f9c7127fef316b4b70d8b452dcd94025d471f0b417f88ee07a" in text
     assert "20969d2e6dbc4d91338901f88c2805afaf642b757adfa4be97225c7364bdc62c" in text
@@ -301,6 +296,7 @@ def test_app_fixture_sintetico_malformado_falla_de_forma_estricta(tmp_path, monk
     assert "no pudo cargar" in text
     assert "Traceback" not in text
     assert "DEMO-01" not in text
+
 
 # Términos de deploy/menú que la shell pública de la demo nunca debe mostrar. La
 # supresión se configura con el ``toolbarMode = "minimal"`` soportado en el

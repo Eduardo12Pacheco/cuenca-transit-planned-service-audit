@@ -30,14 +30,9 @@ from mobility_reliability.transformation import transform_captures, transform_sn
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-ROUTES_MANIFEST = (
-    REPO_ROOT
-    / "data/manifests/rutas-de-transporte-publico/2026-08-02T18-51-08Z.manifest.json"
-)
+ROUTES_MANIFEST = REPO_ROOT / "data/manifests/rutas-de-transporte-publico/2026-08-02T18-51-08Z.manifest.json"
 ROUTES_RAW = REPO_ROOT / "data/raw/rutas-de-transporte-publico/2026-08-02T18-51-08Z.json"
-STOPS_MANIFEST = (
-    REPO_ROOT / "data/manifests/paradas-de-transporte-publico/2026-08-02T19-27-36Z.manifest.json"
-)
+STOPS_MANIFEST = REPO_ROOT / "data/manifests/paradas-de-transporte-publico/2026-08-02T19-27-36Z.manifest.json"
 STOPS_RAW = REPO_ROOT / "data/raw/paradas-de-transporte-publico/2026-08-02T19-27-36Z.json"
 RAW_DIR = REPO_ROOT / "data/raw"
 

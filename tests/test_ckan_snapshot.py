@@ -173,7 +173,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -193,27 +193,17 @@ ROUTES_DATASET_ID = "rutas-de-transporte-publico"
 STOPS_DATASET_ID = "paradas-de-transporte-publico"
 EXCLUDED_DATASET_ID = "recorrido-de-las-rutas-de-transporte-publico"
 
-ROUTES_PACKAGE_URL = (
-    "https://cuencaendatos.cuenca.gob.ec/api/3/action/"
-    "package_show?id=rutas-de-transporte-publico"
-)
-STOPS_PACKAGE_URL = (
-    "https://cuencaendatos.cuenca.gob.ec/api/3/action/"
-    "package_show?id=paradas-de-transporte-publico"
-)
+ROUTES_PACKAGE_URL = "https://cuencaendatos.cuenca.gob.ec/api/3/action/package_show?id=rutas-de-transporte-publico"
+STOPS_PACKAGE_URL = "https://cuencaendatos.cuenca.gob.ec/api/3/action/package_show?id=paradas-de-transporte-publico"
 
 ROUTES_RESOURCE_URL = "https://fixtures.invalid/rutas.csv"
 STOPS_RESOURCE_URL = "https://fixtures.invalid/paradas.csv"
 
 ROUTES_RESOURCE_CONTENT = (
-    b"LINEA,COMPANIA,SENTIDO,ORIGEN,DESTINO\n"
-    b"1,COMPANIA A,I,CENTRO,EL VALLE\n"
-    b"2,COMPANIA B,V,EL VALLE,CENTRO\n"
+    b"LINEA,COMPANIA,SENTIDO,ORIGEN,DESTINO\n1,COMPANIA A,I,CENTRO,EL VALLE\n2,COMPANIA B,V,EL VALLE,CENTRO\n"
 )
 STOPS_RESOURCE_CONTENT = (
-    b"CODIGO,NOMBRE,LATITUD,LONGITUD\n"
-    b"1,PARADA CENTRO,-2.8974,-79.0045\n"
-    b"2,PARADA EL VALLE,-2.8891,-78.9905\n"
+    b"CODIGO,NOMBRE,LATITUD,LONGITUD\n1,PARADA CENTRO,-2.8974,-79.0045\n2,PARADA EL VALLE,-2.8891,-78.9905\n"
 )
 
 LICENSE_DECLARED = "CC BY-NC 2.0"
@@ -224,7 +214,7 @@ LICENSE_URL_CC_BY_4 = "http://creativecommons.org/licenses/by/4.0/"
 LICENSE_URL_CC_BY_NC_SA = "https://creativecommons.org/licenses/by-nc-sa/4.0/"
 GENERIC_LICENSE_TITLE = "Creative Commons Non-Commercial (Cualquiera)"
 RETRIEVAL_METHOD = "public documented CKAN API"
-FIXED_NOW = datetime(2026, 1, 2, 3, 4, 5, tzinfo=timezone.utc)
+FIXED_NOW = datetime(2026, 1, 2, 3, 4, 5, tzinfo=UTC)
 FIXED_UTC_STAMP = "2026-01-02T03-04-05Z"
 
 REQUIRED_MANIFEST_FIELDS = frozenset(
@@ -269,9 +259,7 @@ OMITTED = object()  # centinela: una clave ausente del result del paquete
 class FakeResponse:
     """Respuesta mínima que expone la superficie contratada."""
 
-    def __init__(
-        self, status_code: int = 200, content: bytes | None = b"", headers: dict | None = None
-    ):
+    def __init__(self, status_code: int = 200, content: bytes | None = b"", headers: dict | None = None):
         self.status_code = status_code
         self.content = content
         self.headers = dict(headers or {})
@@ -304,7 +292,7 @@ class FakeClock:
     def __init__(self, now: datetime):
         self._now = now
 
-    def now(self, tz: timezone = timezone.utc) -> datetime:
+    def now(self, tz: timezone = UTC) -> datetime:
         return self._now
 
 
@@ -603,9 +591,7 @@ def test_package_show_con_success_false_registra_manifest_fallido(tmp_path, coll
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]
 
 
@@ -619,17 +605,13 @@ def test_package_show_con_success_false_registra_manifest_fallido(tmp_path, coll
     [b"<html><body>gateway error</body></html>", b"{}", b'{"success": true}'],
     ids=["json-invalido", "sin-success", "sin-result"],
 )
-def test_respuesta_de_paquete_malformada_registra_manifest_fallido(
-    tmp_path, collector_factory, package_bytes
-):
+def test_respuesta_de_paquete_malformada_registra_manifest_fallido(tmp_path, collector_factory, package_bytes):
     transport = build_transport(package_url=ROUTES_PACKAGE_URL, package_bytes=package_bytes)
     collector = collector_factory(transport=transport)
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]
 
 
@@ -638,9 +620,7 @@ def test_respuesta_de_paquete_malformada_registra_manifest_fallido(
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize(
-    "resources", [OMITTED, [], None], ids=["omitido", "lista-vacia", "nulo"]
-)
+@pytest.mark.parametrize("resources", [OMITTED, [], None], ids=["omitido", "lista-vacia", "nulo"])
 def test_falta_el_resource_y_registra_manifest_fallido(tmp_path, collector_factory, resources):
     result = make_result(
         dataset_id=ROUTES_DATASET_ID,
@@ -661,9 +641,7 @@ def test_falta_el_resource_y_registra_manifest_fallido(tmp_path, collector_facto
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]  # nada descargado
 
 
@@ -790,9 +768,7 @@ def test_titulo_de_licencia_ckan_generico_aceptado_con_advertencia(tmp_path, col
     assert any("genérico" in warning.lower() for warning in manifest["warnings"])
 
 
-def test_el_manifest_conserva_la_huella_de_licencia_y_la_restriccion_noncommercial(
-    tmp_path, collector_factory
-):
+def test_el_manifest_conserva_la_huella_de_licencia_y_la_restriccion_noncommercial(tmp_path, collector_factory):
     resource = make_resource(
         resource_id="res-routes-1",
         name="rutas.csv",
@@ -828,9 +804,7 @@ def test_el_manifest_conserva_la_huella_de_licencia_y_la_restriccion_noncommerci
 
 
 @pytest.mark.parametrize("license_title", [None, ""])
-def test_licencia_ausente_registra_manifest_fallido_sin_descargar_resource(
-    tmp_path, collector_factory, license_title
-):
+def test_licencia_ausente_registra_manifest_fallido_sin_descargar_resource(tmp_path, collector_factory, license_title):
     resource = make_resource(
         resource_id="res-routes-1",
         name="rutas.csv",
@@ -853,15 +827,11 @@ def test_licencia_ausente_registra_manifest_fallido_sin_descargar_resource(
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]  # compuerta de licencia antes de descargar el resource
 
 
-def test_clave_de_licencia_ausente_registra_manifest_fallido_sin_descargar_resource(
-    tmp_path, collector_factory
-):
+def test_clave_de_licencia_ausente_registra_manifest_fallido_sin_descargar_resource(tmp_path, collector_factory):
     resource = make_resource(
         resource_id="res-routes-1",
         name="rutas.csv",
@@ -884,16 +854,12 @@ def test_clave_de_licencia_ausente_registra_manifest_fallido_sin_descargar_resou
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]  # compuerta de licencia antes de descargar el resource
 
 
 @pytest.mark.parametrize("license_url", [None, "", OMITTED], ids=["nulo", "vacio", "omitido"])
-def test_url_de_licencia_ausente_falla_antes_de_descargar_resource(
-    tmp_path, collector_factory, license_url
-):
+def test_url_de_licencia_ausente_falla_antes_de_descargar_resource(tmp_path, collector_factory, license_url):
     resource = make_resource(
         resource_id="res-routes-1",
         name="rutas.csv",
@@ -924,15 +890,11 @@ def test_url_de_licencia_ausente_falla_antes_de_descargar_resource(
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]  # el resource nunca se descargó
 
 
-def test_url_de_licencia_incompatible_registra_manifest_fallido_sin_descargar_resource(
-    tmp_path, collector_factory
-):
+def test_url_de_licencia_incompatible_registra_manifest_fallido_sin_descargar_resource(tmp_path, collector_factory):
     # La incompatibilidad la causa la URL publicada (CC BY 4.0), no un título
     # distinto del contrato: el título y el id siguen siendo compatibles.
     resource = make_resource(
@@ -957,15 +919,11 @@ def test_url_de_licencia_incompatible_registra_manifest_fallido_sin_descargar_re
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]  # compuerta de licencia antes de descargar el resource
 
 
-def test_otra_url_de_licencia_creative_commons_falla_antes_de_descargar_resource(
-    tmp_path, collector_factory
-):
+def test_otra_url_de_licencia_creative_commons_falla_antes_de_descargar_resource(tmp_path, collector_factory):
     # Un título que afirma CC BY-NC 2.0 no puede anular una URL de licencia CC distinta.
     resource = make_resource(
         resource_id="res-routes-1",
@@ -990,9 +948,7 @@ def test_otra_url_de_licencia_creative_commons_falla_antes_de_descargar_resource
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]  # el resource nunca se descargó
 
 
@@ -1020,9 +976,7 @@ def test_license_id_incompatible_falla_antes_de_descargar_resource(tmp_path, col
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]  # el resource nunca se descargó
 
 
@@ -1053,9 +1007,7 @@ def test_formato_de_resource_no_soportado_registra_manifest_fallido(tmp_path, co
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]  # nada descargado
 
 
@@ -1109,9 +1061,7 @@ def test_error_http_del_paquete_registra_manifest_fallido(tmp_path, collector_fa
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]
 
 
@@ -1125,9 +1075,7 @@ def test_error_de_red_del_paquete_registra_manifest_fallido(tmp_path, collector_
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL]
 
 
@@ -1159,9 +1107,7 @@ def test_error_de_red_del_resource_registra_manifest_fallido(tmp_path, collector
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL, ROUTES_RESOURCE_URL]
 
 
@@ -1188,9 +1134,7 @@ def test_error_http_del_resource_registra_manifest_fallido(tmp_path, collector_f
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL, ROUTES_RESOURCE_URL]
 
 
@@ -1217,9 +1161,7 @@ def test_cuerpo_invalido_del_resource_registra_manifest_fallido(tmp_path, collec
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     assert transport.calls == [ROUTES_PACKAGE_URL, ROUTES_RESOURCE_URL]
 
 
@@ -1284,9 +1226,7 @@ def test_los_bytes_raw_se_conservan_exactos_y_sha256_coincide(tmp_path, collecto
 # ---------------------------------------------------------------------------
 
 
-def test_el_manifest_contiene_todos_los_campos_y_metadatos_completos(
-    tmp_path, collector_factory
-):
+def test_el_manifest_contiene_todos_los_campos_y_metadatos_completos(tmp_path, collector_factory):
     resource, result, transport = routes_world()
     collector = collector_factory(transport=transport)
 
@@ -1377,9 +1317,7 @@ def test_no_sobrescribe_cuando_el_destino_manifest_ya_existe(tmp_path, collector
     assert not (tmp_path / "raw").exists()  # el lado raw nunca se toca
 
 
-def test_recapturar_con_la_misma_marca_de_tiempo_falla_cerrado_en_lugar_de_sobrescribir(
-    tmp_path, collector_factory
-):
+def test_recapturar_con_la_misma_marca_de_tiempo_falla_cerrado_en_lugar_de_sobrescribir(tmp_path, collector_factory):
     _, _, transport = routes_world()
     collector = collector_factory(transport=transport)
 
@@ -1421,9 +1359,7 @@ def test_los_dataset_ids_y_source_ids_de_rutas_y_paradas_permanecen_distintos():
 # ---------------------------------------------------------------------------
 
 
-def test_el_dataset_de_geometria_de_rutas_queda_excluido_y_nunca_activa_el_transport(
-    tmp_path, collector_factory
-):
+def test_el_dataset_de_geometria_de_rutas_queda_excluido_y_nunca_activa_el_transport(tmp_path, collector_factory):
     assert EXCLUDED_DATASET_ID not in DATASET_SPECS
     assert EXCLUDED_DATASET_ID not in CKAN_PACKAGE_SHOW_URLS
 
@@ -1523,9 +1459,7 @@ def test_paradas_selecciona_el_csv_de_abril_2025_sobre_el_de_septiembre_2022(tmp
     assert manifest["resource_name"] == "GADCuenca_ParadasTransporte_2025Abril.csv"
 
 
-def test_los_resources_zip_y_csv_de_geometria_se_excluyen_aun_siendo_mas_nuevos(
-    tmp_path, collector_factory
-):
+def test_los_resources_zip_y_csv_de_geometria_se_excluyen_aun_siendo_mas_nuevos(tmp_path, collector_factory):
     zip_resource = make_resource(
         resource_id="res-zip-geo",
         name="GADCuenca_ParadasTransporteGeo_2022Septiembre.zip",
@@ -1579,9 +1513,7 @@ def test_los_resources_zip_y_csv_de_geometria_se_excluyen_aun_siendo_mas_nuevos(
 # ---------------------------------------------------------------------------
 
 
-def test_manifest_fallido_sin_raw_persistido_tiene_raw_hash_y_row_count_nulos(
-    tmp_path, collector_factory
-):
+def test_manifest_fallido_sin_raw_persistido_tiene_raw_hash_y_row_count_nulos(tmp_path, collector_factory):
     resource = make_resource(
         resource_id="res-routes-1",
         name="rutas.csv",
@@ -1604,18 +1536,14 @@ def test_manifest_fallido_sin_raw_persistido_tiene_raw_hash_y_row_count_nulos(
 
     manifest = collector.collect(ROUTES_DATASET_ID)
 
-    assert_failed_manifest(
-        manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL
-    )
+    assert_failed_manifest(manifest, tmp_path / "raw", tmp_path / "manifests", ROUTES_DATASET_ID, ROUTES_PACKAGE_URL)
     # Un manifest fallido que nunca persistió un raw no debe apuntar a un archivo inexistente.
     assert manifest["raw_file"] is None
     assert manifest["content_hash"] is None
     assert manifest["row_count"] is None
 
 
-def test_csv_utf8_invalido_conserva_los_bytes_raw_exactos_y_manifest_fallido_coherente(
-    tmp_path, collector_factory
-):
+def test_csv_utf8_invalido_conserva_los_bytes_raw_exactos_y_manifest_fallido_coherente(tmp_path, collector_factory):
     invalid_utf8 = b"CODIGO,NOMBRE\n1,PARADA CENTRO\n2,\xff\xfe\x90 broken\n"
     resource = make_resource(
         resource_id="res-bad-encoding",
@@ -1652,9 +1580,7 @@ def test_csv_utf8_invalido_conserva_los_bytes_raw_exactos_y_manifest_fallido_coh
     assert manifest["content_hash"] == hashlib.sha256(raw_path.read_bytes()).hexdigest()
 
 
-def test_content_hash_se_calcula_y_verifica_contra_el_raw_en_disco(
-    monkeypatch, tmp_path, collector_factory
-):
+def test_content_hash_se_calcula_y_verifica_contra_el_raw_en_disco(monkeypatch, tmp_path, collector_factory):
     _, _, transport = routes_world()
     collector = collector_factory(transport=transport)
 
@@ -1681,9 +1607,7 @@ def test_content_hash_se_calcula_y_verifica_contra_el_raw_en_disco(
 ORPHAN_CONTENT_HASH = "a15063103fc7ea1e050f73b0fd8045def0bc786799069db32daebcd71f11c6ef"
 
 
-def write_orphan_failed_manifest(
-    manifest_dir: Path, dataset_id: str, *, raw_file: str | None = None
-) -> Path:
+def write_orphan_failed_manifest(manifest_dir: Path, dataset_id: str, *, raw_file: str | None = None) -> Path:
     """Escribe un manifest fallido que reclama un archivo raw (que puede estar ausente)."""
     manifest_path = expected_manifest_path(manifest_dir, dataset_id)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1704,9 +1628,7 @@ def write_orphan_failed_manifest(
 
 
 def default_sidecar_path(manifest_path: Path) -> Path:
-    return manifest_path.with_name(
-        manifest_path.name.replace(".manifest.json", ".manifest.correction.json")
-    )
+    return manifest_path.with_name(manifest_path.name.replace(".manifest.json", ".manifest.correction.json"))
 
 
 def test_supersede_orphan_manifest_escribe_sidecar_sin_tocar_el_original(tmp_path):
@@ -1754,9 +1676,7 @@ def test_supersede_orphan_manifest_falla_cerrado_cuando_el_raw_file_existe(tmp_p
     ids=["traversal", "absoluta", "traversal-anidada"],
 )
 def test_supersede_orphan_manifest_rechaza_rutas_raw_inseguras(tmp_path, unsafe_raw_file):
-    manifest_path = write_orphan_failed_manifest(
-        tmp_path / "manifests", STOPS_DATASET_ID, raw_file=unsafe_raw_file
-    )
+    manifest_path = write_orphan_failed_manifest(tmp_path / "manifests", STOPS_DATASET_ID, raw_file=unsafe_raw_file)
 
     with pytest.raises(ValueError, match="raw_file"):
         supersede_orphan_manifest(manifest_path, tmp_path / "raw")

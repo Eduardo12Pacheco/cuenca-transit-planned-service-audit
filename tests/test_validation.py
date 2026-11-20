@@ -35,9 +35,15 @@ from __future__ import annotations
 
 import hashlib
 import json
-from pathlib import Path
 
 import pytest
+from capture_fixtures import (
+    LICENSE_ID_APPROVED,
+    LICENSE_URL_APPROVED,
+    ROUTES_DATASET_ID,
+    STOPS_DATASET_ID,
+    write_snapshot,
+)
 
 from mobility_reliability.ingestion.ckan_snapshot import (
     CKAN_PACKAGE_SHOW_URLS,
@@ -47,17 +53,6 @@ from mobility_reliability.validation import (
     SourceSnapshot,
     validate_source_snapshot,
 )
-
-from capture_fixtures import (
-    LICENSE_DECLARED,
-    LICENSE_ID_APPROVED,
-    LICENSE_URL_APPROVED,
-    ROUTES_DATASET_ID,
-    ROUTES_RAW_TWO_ROWS,
-    STOPS_DATASET_ID,
-    write_snapshot,
-)
-
 
 # ---------------------------------------------------------------------------
 # Camino feliz
@@ -150,9 +145,7 @@ def test_falta_el_archivo_manifest_y_lanza_error(tmp_path):
         validate_source_snapshot(missing, raw_dir)
 
 
-@pytest.mark.parametrize(
-    "payload", ["[]", '"not an object"', "null", "42"], ids=["lista", "cadena", "nulo", "numero"]
-)
+@pytest.mark.parametrize("payload", ["[]", '"not an object"', "null", "42"], ids=["lista", "cadena", "nulo", "numero"])
 def test_manifest_no_es_objeto_json_y_lanza_error(tmp_path, payload):
     _, manifest_path, raw_dir = write_snapshot(tmp_path)
     manifest_path.write_text(payload, encoding="utf-8")
@@ -446,10 +439,7 @@ def test_raw_con_utf8_invalido_lanza_error(tmp_path):
 def test_filas_csv_desalineadas_lanzan_error(tmp_path):
     _, manifest_path, raw_dir = write_snapshot(tmp_path)
     raw_path = tmp_path / "raw" / ROUTES_DATASET_ID / "2026-08-02T18-51-08Z.json"
-    ragged = (
-        "LINEA,COMPANIA,SENTIDO\n"
-        "1,SIT,IDA,EXTRA\n"
-    )
+    ragged = "LINEA,COMPANIA,SENTIDO\n1,SIT,IDA,EXTRA\n"
     raw_path.write_bytes(ragged.encode("utf-8"))
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     manifest["content_hash"] = hashlib.sha256(ragged.encode("utf-8")).hexdigest()

@@ -56,9 +56,7 @@ def write_snapshot(
     # las fixtures conservan esas mismas marcas que las capturas reales para
     # mantener la autenticidad de la prueba.
     stamp = "2026-08-02T19-27-36Z" if dataset_id == STOPS_DATASET_ID else "2026-08-02T18-51-08Z"
-    collection_timestamp_utc = (
-        "2026-08-02T19:27:36Z" if dataset_id == STOPS_DATASET_ID else "2026-08-02T18:51:08Z"
-    )
+    collection_timestamp_utc = "2026-08-02T19:27:36Z" if dataset_id == STOPS_DATASET_ID else "2026-08-02T18:51:08Z"
     if raw_file is None:
         raw_file = f"{dataset_id}/{stamp}.json"
     raw_bytes = raw_text.encode("utf-8")

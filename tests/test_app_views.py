@@ -44,8 +44,8 @@ import json
 from pathlib import Path
 
 import pytest
-
 from capture_fixtures import ROUTES_DATASET_ID, STOPS_DATASET_ID, write_snapshot
+
 from mobility_reliability.transformation import transform_captures
 from mobility_reliability.validation import SnapshotValidationError
 
@@ -84,19 +84,14 @@ STOPS_RAW = (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-REAL_ROUTES_MANIFEST = (
-    REPO_ROOT / "data/manifests/rutas-de-transporte-publico/2026-08-02T18-51-08Z.manifest.json"
-)
-REAL_STOPS_MANIFEST = (
-    REPO_ROOT / "data/manifests/paradas-de-transporte-publico/2026-08-02T19-27-36Z.manifest.json"
-)
+REAL_ROUTES_MANIFEST = REPO_ROOT / "data/manifests/rutas-de-transporte-publico/2026-08-02T18-51-08Z.manifest.json"
+REAL_STOPS_MANIFEST = REPO_ROOT / "data/manifests/paradas-de-transporte-publico/2026-08-02T19-27-36Z.manifest.json"
 REAL_RAW_DIR = REPO_ROOT / "data/raw"
 REAL_AUDIT_JSON = REPO_ROOT / "data/quality/coordinate-format-audit.json"
 
-REAL_RAWS_PRESENT = (
-    (REAL_RAW_DIR / "rutas-de-transporte-publico/2026-08-02T18-51-08Z.json").is_file()
-    and (REAL_RAW_DIR / "paradas-de-transporte-publico/2026-08-02T19-27-36Z.json").is_file()
-)
+REAL_RAWS_PRESENT = (REAL_RAW_DIR / "rutas-de-transporte-publico/2026-08-02T18-51-08Z.json").is_file() and (
+    REAL_RAW_DIR / "paradas-de-transporte-publico/2026-08-02T19-27-36Z.json"
+).is_file()
 
 REQUIRES_REAL_RAWS = pytest.mark.skipif(
     not REAL_RAWS_PRESENT,
@@ -177,9 +172,7 @@ def test_load_combined_con_rutas_explicitas(tmp_path):
     _, stops_manifest, _ = write_snapshot(tmp_path, dataset_id=STOPS_DATASET_ID)
     combined = data.load_combined(routes_manifest, stops_manifest, raw_dir)
     assert len(combined["source_snapshots"]) == 2
-    assert combined["planned_service"][0]["provenance"]["source_snapshot_id"].startswith(
-        "rutas-de-transporte-publico@"
-    )
+    assert combined["planned_service"][0]["provenance"]["source_snapshot_id"].startswith("rutas-de-transporte-publico@")
 
 
 def test_manifest_ausente_lanza_error_y_el_mensaje_es_claro(tmp_path):
@@ -344,9 +337,7 @@ def test_service_rows_llevan_la_incidencia_de_destino_ausente(tmp_path):
         "DOMINGOS_INICIO,DOMINGOS_FIN,DOMINGOS_INTERVALO\n"
         "55,EMPRESA X,IDA,CENTRO,,6:00,18:00,0:10,6:00,18:00,0:10,6:00,18:00,0:10\n"
     )
-    _, manifest, raw_dir = write_snapshot(
-        tmp_path / "destino", dataset_id=ROUTES_DATASET_ID, raw_text=raw
-    )
+    _, manifest, raw_dir = write_snapshot(tmp_path / "destino", dataset_id=ROUTES_DATASET_ID, raw_text=raw)
     result = transform_snapshot(manifest, raw_dir)
     combined = {
         "source_snapshots": [result["source_snapshot"]],
@@ -687,7 +678,7 @@ def test_el_artefacto_real_de_auditoria_esta_sin_resolver():
     assert audit["raw_sha256"] == "20969d2e6dbc4d91338901f88c2805afaf642b757adfa4be97225c7364bdc62c"
     assert audit["row_count"] == 383
     for column in audit["columns_audited"]:
-        for category, examples in audit["examples"][column].items():
+        for _category, examples in audit["examples"][column].items():
             assert len(examples) <= 20
             for example in examples:
                 assert isinstance(example["value"], str)
@@ -710,9 +701,7 @@ def test_hashes_reales_de_provenance_fijados():
 # cargador de la demo con modos: camino real estricto vs fixture sintético versionado
 # ---------------------------------------------------------------------------
 
-SYNTHETIC_STOPS_HASH = (
-    "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
-)
+SYNTHETIC_STOPS_HASH = "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
 
 
 def test_load_demo_payload_modo_real_con_fixtures_capturados(tmp_path):
@@ -743,9 +732,7 @@ def test_load_demo_payload_modo_sintetico_sin_raws(tmp_path):
     assert audit["decision"] == "format_unresolved"
     assert audit["format_resolved"] is False
     assert audit["raw_sha256"] == SYNTHETIC_STOPS_HASH
-    assert audit["raw_sha256"] != (
-        "20969d2e6dbc4d91338901f88c2805afaf642b757adfa4be97225c7364bdc62c"
-    )
+    assert audit["raw_sha256"] != ("20969d2e6dbc4d91338901f88c2805afaf642b757adfa4be97225c7364bdc62c")
 
 
 def test_load_demo_payload_fixture_sintetico_cubre_el_contrato(tmp_path):
@@ -758,11 +745,7 @@ def test_load_demo_payload_fixture_sintetico_cubre_el_contrato(tmp_path):
     statuses = {record["service_status"] for record in combined["planned_service"]}
     assert "active" in statuses and "no_service" in statuses
     # Los casos sin servicio son el centinela exacto 0:00/0:00/0:00.
-    no_service = [
-        record
-        for record in combined["planned_service"]
-        if record["service_status"] == "no_service"
-    ]
+    no_service = [record for record in combined["planned_service"] if record["service_status"] == "no_service"]
     assert len(no_service) == 3
     assert all(
         (
@@ -785,11 +768,7 @@ def test_load_demo_payload_integridad_del_join_sintetico(tmp_path):
     """Cada registro planned_service une un registro de ruta por network_id."""
     payload = data.load_demo_payload(raw_dir=tmp_path / "no-raw-root")
     combined = payload["combined"]
-    route_ids = {
-        record["network_id"]
-        for record in combined["mobility_network"]
-        if record["element_type"] == "route"
-    }
+    route_ids = {record["network_id"] for record in combined["mobility_network"] if record["element_type"] == "route"}
     assert {record["network_id"] for record in combined["planned_service"]} == route_ids
 
 
@@ -829,9 +808,7 @@ def test_load_demo_payload_raw_parcial_falla_de_forma_estricta(tmp_path):
 def test_load_demo_payload_raw_real_corrupto_no_recurre_al_fixture(tmp_path):
     """Ambos raw presentes pero evidencia real inválida -> el fallo estricto se propaga;
     el fixture sintético nunca se usa."""
-    routes_raw_path, routes_manifest, raw_dir = write_snapshot(
-        tmp_path, dataset_id=ROUTES_DATASET_ID
-    )
+    routes_raw_path, routes_manifest, raw_dir = write_snapshot(tmp_path, dataset_id=ROUTES_DATASET_ID)
     _, stops_manifest, _ = write_snapshot(tmp_path, dataset_id=STOPS_DATASET_ID)
     routes_raw_path.write_bytes(b"corrupted bytes")  # el content_hash ya no coincide
     with pytest.raises(SnapshotValidationError, match="content_hash"):
