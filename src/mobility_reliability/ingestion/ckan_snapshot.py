@@ -126,7 +126,7 @@ import json
 import re
 import urllib.request
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -152,13 +152,9 @@ ROUTES_DATASET_ID = "rutas-de-transporte-publico"
 STOPS_DATASET_ID = "paradas-de-transporte-publico"
 
 CKAN_PACKAGE_SHOW_URLS = {
-    ROUTES_DATASET_ID: (
-        "https://cuencaendatos.cuenca.gob.ec/api/3/action/"
-        "package_show?id=rutas-de-transporte-publico"
-    ),
+    ROUTES_DATASET_ID: ("https://cuencaendatos.cuenca.gob.ec/api/3/action/package_show?id=rutas-de-transporte-publico"),
     STOPS_DATASET_ID: (
-        "https://cuencaendatos.cuenca.gob.ec/api/3/action/"
-        "package_show?id=paradas-de-transporte-publico"
+        "https://cuencaendatos.cuenca.gob.ec/api/3/action/package_show?id=paradas-de-transporte-publico"
     ),
 }
 
@@ -251,7 +247,7 @@ class UrllibTransport:
 class _UtcClock:
     """Reloj por defecto: hora actual como datetime UTC con zona horaria."""
 
-    def now(self, tz: timezone = timezone.utc) -> datetime:
+    def now(self, tz: timezone = UTC) -> datetime:
         return datetime.now(tz)
 
 
@@ -282,15 +278,14 @@ class CkanSnapshotCollector:
         """
         if dataset_id not in CKAN_PACKAGE_SHOW_URLS:
             raise ValueError(
-                f"dataset id desconocido: {dataset_id!r}; "
-                f"se esperaba uno de {sorted(CKAN_PACKAGE_SHOW_URLS)}"
+                f"dataset id desconocido: {dataset_id!r}; se esperaba uno de {sorted(CKAN_PACKAGE_SHOW_URLS)}"
             )
         spec = DATASET_SPECS[dataset_id]
 
         now = self.clock.now()
         if not isinstance(now, datetime) or now.tzinfo is None:
             raise ValueError("clock.now() debe devolver un datetime UTC con zona horaria")
-        now_utc = now.astimezone(timezone.utc)
+        now_utc = now.astimezone(UTC)
         stamp = now_utc.strftime("%Y-%m-%dT%H-%M-%SZ")
         iso_utc = now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -322,8 +317,7 @@ class CkanSnapshotCollector:
         if declared_length is not None and declared_length != len(body):
             manifest["status"] = "partial"
             manifest["warnings"].append(
-                f"desajuste de Content-Length: se declararon {declared_length} bytes, "
-                f"se recibieron {len(body)} bytes"
+                f"desajuste de Content-Length: se declararon {declared_length} bytes, se recibieron {len(body)} bytes"
             )
             manifest["notes"] = (
                 f"Descarga parcial para {dataset_id}: los bytes recibidos se conservan en "
@@ -340,17 +334,13 @@ class CkanSnapshotCollector:
             )
             return manifest
 
-        row_count, invalid_reason = self._validate_body(
-            manifest, manifest["resource_format"], body
-        )
+        row_count, invalid_reason = self._validate_body(manifest, manifest["resource_format"], body)
         if invalid_reason is not None:
             # Los bytes exactos se conservan antes de escribir el manifest
             # fallido; el hash se calcula desde el archivo raw en disco.
             manifest["status"] = "failed"
             manifest["warnings"] = [invalid_reason]
-            manifest["notes"] = (
-                f"Falló la validación del cuerpo para {dataset_id}: {invalid_reason}"
-            )
+            manifest["notes"] = f"Falló la validación del cuerpo para {dataset_id}: {invalid_reason}"
             self._persist_snapshot(
                 manifest_path,
                 manifest,
@@ -464,9 +454,7 @@ class CkanSnapshotCollector:
 
     # -- construcción del manifest -------------------------------------------
 
-    def _base_manifest(
-        self, dataset_id: str, spec: dict, source_url: str, iso_utc: str, stamp: str
-    ) -> dict:
+    def _base_manifest(self, dataset_id: str, spec: dict, source_url: str, iso_utc: str, stamp: str) -> dict:
         return {
             "snapshot_id": f"{dataset_id}@{stamp}",
             "source_id": spec["source_id"],
@@ -644,8 +632,7 @@ class CkanSnapshotCollector:
                 self._fail(
                     manifest_path,
                     manifest,
-                    [f"la URL de licencia del dataset {published_url.strip()!r} no es la oficial "
-                     f"CC BY-NC 2.0"],
+                    [f"la URL de licencia del dataset {published_url.strip()!r} no es la oficial CC BY-NC 2.0"],
                     f"Compuerta de licencia: {published_url.strip()!r} no es la URL oficial "
                     f"de la licencia CC BY-NC 2.0; se rechaza la descarga del resource.",
                 )
@@ -684,9 +671,7 @@ class CkanSnapshotCollector:
             return False
         return parts.path in (_APPROVED_LICENSE_PATH, f"{_APPROVED_LICENSE_PATH}/")
 
-    def _select_resource(
-        self, manifest: dict, spec: dict, result: dict, manifest_path: Path
-    ) -> dict | None:
+    def _select_resource(self, manifest: dict, spec: dict, result: dict, manifest_path: Path) -> dict | None:
         """Selecciona el CSV no geométrico aprobado más nuevo, de forma determinista.
 
         Los resources elegibles tienen formato CSV, un ``id``/``name`` válidos y
@@ -704,11 +689,7 @@ class CkanSnapshotCollector:
             )
             return None
         allowed_formats = {fmt.strip().upper() for fmt in spec["allowed_formats"]}
-        candidates = [
-            resource
-            for resource in resources
-            if self._is_acceptable_resource(resource, allowed_formats)
-        ]
+        candidates = [resource for resource in resources if self._is_acceptable_resource(resource, allowed_formats)]
         if not candidates:
             self._fail(
                 manifest_path,
@@ -755,10 +736,7 @@ class CkanSnapshotCollector:
         geospatial/geoespacial, georreferenciadas/georeferenced, recorrido
         (geometría de rutas), shape(s) y geo.
         """
-        text = " ".join(
-            str(resource.get(key) or "").lower()
-            for key in ("id", "name", "description", "url")
-        )
+        text = " ".join(str(resource.get(key) or "").lower() for key in ("id", "name", "description", "url"))
         return any(marker in text for marker in _GEOMETRY_MARKERS)
 
     @staticmethod
@@ -782,20 +760,14 @@ class CkanSnapshotCollector:
         """
         name = resource.get("name")
         description = resource.get("description")
-        text = " ".join(
-            str(value)
-            for value in (name, description)
-            if isinstance(value, str) and value.strip()
-        ).lower()
+        text = " ".join(str(value) for value in (name, description) if isinstance(value, str) and value.strip()).lower()
         if not text:
             return None
         year_first = _YEAR_FIRST_DATE.search(text)
         month_first = _MONTH_FIRST_DATE.search(text)
         if year_first is None and month_first is None:
             return None
-        if month_first is None or (
-            year_first is not None and year_first.start() <= month_first.start()
-        ):
+        if month_first is None or (year_first is not None and year_first.start() <= month_first.start()):
             return int(year_first.group(1)), cls._month_token(year_first.group(2))
         return int(month_first.group(2)), cls._month_token(month_first.group(1))
 
@@ -844,9 +816,7 @@ class CkanSnapshotCollector:
             resource["id"],
         )
 
-    def _fetch_resource(
-        self, manifest: dict, resource_url: str, manifest_path: Path
-    ) -> object | None:
+    def _fetch_resource(self, manifest: dict, resource_url: str, manifest_path: Path) -> object | None:
         """Descarga el resource seleccionado; devuelve la respuesta o None (fallido)."""
         try:
             response = self.transport.get(resource_url)
@@ -948,24 +918,16 @@ def supersede_orphan_manifest(
         original = json.load(handle)
 
     if original.get("status") != "failed":
-        raise ValueError(
-            f"el manifest {manifest_path} no está fallido; se rechaza supersederlo"
-        )
+        raise ValueError(f"el manifest {manifest_path} no está fallido; se rechaza supersederlo")
 
     raw_file = original.get("raw_file")
     if not isinstance(raw_file, str) or not raw_file.strip():
-        raise ValueError(
-            f"el manifest {manifest_path} no reclama ningún raw_file; no hay nada que superseder"
-        )
+        raise ValueError(f"el manifest {manifest_path} no reclama ningún raw_file; no hay nada que superseder")
     resolved_raw = (raw_dir / raw_file).resolve()
     if not resolved_raw.is_relative_to(raw_dir.resolve()):
-        raise ValueError(
-            f"raw_file {raw_file!r} escapa de raw_dir {raw_dir}; se rechaza la supersedencia"
-        )
+        raise ValueError(f"raw_file {raw_file!r} escapa de raw_dir {raw_dir}; se rechaza la supersedencia")
     if resolved_raw.exists():
-        raise FileExistsError(
-            f"el archivo raw referenciado existe en {resolved_raw}; el manifest no es huérfano"
-        )
+        raise FileExistsError(f"el archivo raw referenciado existe en {resolved_raw}; el manifest no es huérfano")
 
     if sidecar_path is None:
         name = manifest_path.name
@@ -995,7 +957,7 @@ def supersede_orphan_manifest(
             "No hay ningún archivo raw disponible para este manifest; el hash "
             "de contenido reclamado originalmente no está confirmado."
         ),
-        "superseded_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "superseded_at_utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "schema_version": 1,
     }
     sidecar_path.parent.mkdir(parents=True, exist_ok=True)

@@ -38,7 +38,6 @@ def esc(value: object) -> str:
 def main() -> int:
     audit = json.loads(AUDIT.read_text(encoding="utf-8"))
     counts = audit["per_column_counts"]
-    examples = audit["examples"]
     rows = audit["row_count"]
     total_values = audit["total_coordinate_values"]
 
@@ -50,6 +49,7 @@ def main() -> int:
     # Grouped stacked bars (two columns, same row scale). Geometry is fixed so every bar top and every numeric label stays inside the 0 0 1100 620 viewBox: the tallest stack (all 383 rows) reaches bar_y_base - max_h = 92 and its label sits at 86, below the classification caption at y=70.
     bar_y_base = 200
     max_h = 108
+
     def bar_height(count: int) -> float:
         return count / rows * max_h
 
@@ -89,7 +89,7 @@ def main() -> int:
         f'<rect x="150" y="{callout_y - 34}" width="800" height="74" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>'
         f'<text x="170" y="{callout_y}" font-family="sans-serif" font-size="17" font-weight="bold" fill="#111827">Pares de coordenadas simultaneamente validos: {VALID_COORDINATE_PAIRS}</text>'
         f'<text x="170" y="{callout_y + 20}" font-family="sans-serif" font-size="11.5" fill="#374151">Evidencia derivada, no un campo del artefacto de auditoria: las {audit["rows_with_both_nonblank"]} filas tienen ambas columnas no vacias.</text>'
-            f'<text x="170" y="{callout_y + 40}" font-family="sans-serif" font-size="11.5" fill="#374151">pero ninguna las tiene ambas validas (fijado por tests/test_captured_snapshots.py; cobertura de puntos {VALID_POINT_COVERAGE:.1f}).</text>'
+        f'<text x="170" y="{callout_y + 40}" font-family="sans-serif" font-size="11.5" fill="#374151">pero ninguna las tiene ambas validas (fijado por tests/test_captured_snapshots.py; cobertura de puntos {VALID_POINT_COVERAGE:.1f}).</text>'
     )
 
     decision_y = callout_y + 56

@@ -30,9 +30,7 @@ APP_DIR = Path(__file__).resolve().parent
 REPO_ROOT = APP_DIR.parent
 
 ROUTES_MANIFEST = REPO_ROOT / "data/manifests/rutas-de-transporte-publico/2026-08-02T18-51-08Z.manifest.json"
-STOPS_MANIFEST = (
-    REPO_ROOT / "data/manifests/paradas-de-transporte-publico/2026-08-02T19-27-36Z.manifest.json"
-)
+STOPS_MANIFEST = REPO_ROOT / "data/manifests/paradas-de-transporte-publico/2026-08-02T19-27-36Z.manifest.json"
 RAW_DIR = REPO_ROOT / "data/raw"
 COORDINATE_AUDIT_JSON = REPO_ROOT / "data/quality/coordinate-format-audit.json"
 COORDINATE_AUDIT_MARKDOWN = REPO_ROOT / "docs/coordinate-quality-audit.md"
@@ -261,21 +259,15 @@ def load_synthetic_combined(path: str | Path | None = None) -> dict:
     """
     fixture_path = Path(path) if path is not None else SYNTHETIC_COMBINED_JSON
     if not fixture_path.is_file():
-        raise SyntheticFixtureError(
-            f"no se encontró el fixture sintético de demostración: {fixture_path}"
-        )
+        raise SyntheticFixtureError(f"no se encontró el fixture sintético de demostración: {fixture_path}")
     try:
         loaded = json.loads(fixture_path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise SyntheticFixtureError(
-            f"el fixture sintético de demostración no es JSON legible en "
-            f"{fixture_path}: {exc}"
-        )
+            f"el fixture sintético de demostración no es JSON legible en {fixture_path}: {exc}"
+        ) from exc
     if not isinstance(loaded, dict):
-        raise SyntheticFixtureError(
-            f"el fixture sintético de demostración no es un objeto JSON en "
-            f"{fixture_path}"
-        )
+        raise SyntheticFixtureError(f"el fixture sintético de demostración no es un objeto JSON en {fixture_path}")
     _validate_synthetic_shape(loaded)
     return loaded
 
@@ -293,9 +285,7 @@ def _validate_synthetic_shape(loaded: dict) -> None:
 
     fixture = loaded.get("fixture")
     if not isinstance(fixture, dict) or fixture.get("synthetic") is not True:
-        problems.append(
-            "faltan los metadatos del fixture o no están marcados como synthetic=true"
-        )
+        problems.append("faltan los metadatos del fixture o no están marcados como synthetic=true")
 
     for key, expected in (
         ("source_snapshots", list),
@@ -333,9 +323,7 @@ def _validate_synthetic_shape(loaded: dict) -> None:
             elif element_type == "stop":
                 required += ("stop_id", "stop_name", "latitude", "longitude", "geometry")
             else:
-                problems.append(
-                    f"mobility_network[{index}] element_type desconocido {element_type!r}"
-                )
+                problems.append(f"mobility_network[{index}] element_type desconocido {element_type!r}")
             for key in required:
                 if key not in record:
                     problems.append(f"mobility_network[{index}] no tiene {key!r}")
@@ -372,20 +360,14 @@ def _validate_synthetic_shape(loaded: dict) -> None:
                     problems.append(f"planned_service[{index}] no tiene {key!r}")
             day_type = record.get("day_type")
             if day_type not in _CANONICAL_DAY_TYPES:
-                problems.append(
-                    f"planned_service[{index}] day_type {day_type!r} no está en "
-                    f"{_CANONICAL_DAY_TYPES}"
-                )
+                problems.append(f"planned_service[{index}] day_type {day_type!r} no está en {_CANONICAL_DAY_TYPES}")
             status = record.get("service_status")
             if status not in _CANONICAL_SERVICE_STATUSES:
                 problems.append(
-                    f"planned_service[{index}] service_status {status!r} no está en "
-                    f"{_CANONICAL_SERVICE_STATUSES}"
+                    f"planned_service[{index}] service_status {status!r} no está en {_CANONICAL_SERVICE_STATUSES}"
                 )
             if record.get("direction") not in _CANONICAL_DIRECTIONS:
-                problems.append(
-                    f"planned_service[{index}] direction no está en {_CANONICAL_DIRECTIONS}"
-                )
+                problems.append(f"planned_service[{index}] direction no está en {_CANONICAL_DIRECTIONS}")
             if not isinstance(record.get("quality_flags"), list):
                 problems.append(f"planned_service[{index}] quality_flags no es una lista")
             if not isinstance(record.get("provenance"), dict):
@@ -399,9 +381,7 @@ def _validate_synthetic_shape(loaded: dict) -> None:
     snapshots = loaded.get("source_snapshots")
     if isinstance(snapshots, list):
         if len(snapshots) != 2:
-            problems.append(
-                "source_snapshots debe contener exactamente los dos snapshots de la demo"
-            )
+            problems.append("source_snapshots debe contener exactamente los dos snapshots de la demo")
         for index, snapshot in enumerate(snapshots):
             if not isinstance(snapshot, dict):
                 problems.append(f"source_snapshots[{index}] no es un objeto")
@@ -443,16 +423,13 @@ def _validate_synthetic_shape(loaded: dict) -> None:
             if key not in audit:
                 problems.append(f"coordinate_audit no tiene {key!r}")
         if audit.get("decision") != "format_unresolved":
-            problems.append(
-                "la decisión de coordinate_audit debe ser 'format_unresolved' para la demo"
-            )
+            problems.append("la decisión de coordinate_audit debe ser 'format_unresolved' para la demo")
         if not isinstance(audit.get("examples"), dict):
             problems.append("coordinate_audit examples no es un objeto")
 
     if problems:
         raise SyntheticFixtureError(
-            "falló la validación de la forma del fixture sintético:\n- "
-            + "\n- ".join(problems)
+            "falló la validación de la forma del fixture sintético:\n- " + "\n- ".join(problems)
         )
 
 

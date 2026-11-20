@@ -41,9 +41,7 @@ def _line_key(line: str) -> tuple:
 
 
 def _route_records(combined: dict) -> list[dict]:
-    return [
-        record for record in combined["mobility_network"] if record["element_type"] == "route"
-    ]
+    return [record for record in combined["mobility_network"] if record["element_type"] == "route"]
 
 
 def _service_row(route: dict, record: dict | None, day_type: str) -> dict:
@@ -124,18 +122,13 @@ def day_types(combined: dict) -> list[str]:
 def service_rows(combined: dict, day_type: str) -> list[dict]:
     """Una fila de visualización por ruta para el tipo de día dado (las 76 filas)."""
     service_by_network = {
-        record["network_id"]: record
-        for record in combined["planned_service"]
-        if record["day_type"] == day_type
+        record["network_id"]: record for record in combined["planned_service"] if record["day_type"] == day_type
     }
     routes = sorted(
         _route_records(combined),
         key=lambda record: (_line_key(record["route_line"]), record["direction"] or ""),
     )
-    return [
-        _service_row(route, service_by_network.get(route["network_id"]), day_type)
-        for route in routes
-    ]
+    return [_service_row(route, service_by_network.get(route["network_id"]), day_type) for route in routes]
 
 
 def route_rows(combined: dict) -> list[dict]:
@@ -158,9 +151,7 @@ def route_rows(combined: dict) -> list[dict]:
     ]
 
 
-def selected_window(
-    combined: dict, line: str, direction: str, day_type: str
-) -> dict | None:
+def selected_window(combined: dict, line: str, direction: str, day_type: str) -> dict | None:
     """La fila de visualización del servicio planificado para la selección
     exacta, o ``None``.
 
@@ -175,11 +166,7 @@ def selected_window(
             day_type,
         ):
             route = next(
-                (
-                    item
-                    for item in combined["mobility_network"]
-                    if item["network_id"] == record["network_id"]
-                ),
+                (item for item in combined["mobility_network"] if item["network_id"] == record["network_id"]),
                 None,
             )
             if route is None:
@@ -349,9 +336,7 @@ def no_service_window_table_rows(combined: dict) -> list[dict]:
     ]
 
 
-def technical_detail_rows(
-    combined: dict, line: str, direction: str, day_type: str
-) -> list[dict] | None:
+def technical_detail_rows(combined: dict, line: str, direction: str, day_type: str) -> list[dict] | None:
     """Detalles técnicos canónicos de la ventana seleccionada (expander
     técnico).
 
@@ -377,10 +362,7 @@ def technical_detail_rows(
         {"campo": "quality_flags", "valor": ", ".join(window["flags"])},
     ]
     provenance = window.get("provenance") or {}
-    details.extend(
-        {"campo": f"provenance.{key}", "valor": value}
-        for key, value in sorted(provenance.items())
-    )
+    details.extend({"campo": f"provenance.{key}", "valor": value} for key, value in sorted(provenance.items()))
     return details
 
 

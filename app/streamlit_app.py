@@ -91,9 +91,7 @@ if audit is None:
 with st.sidebar:
     st.header(i18n.SIDEBAR_SELECTION)
     line = st.selectbox(i18n.SIDEBAR_LINE, views.route_lines(combined), key="line")
-    direction = st.selectbox(
-        i18n.SIDEBAR_DIRECTION, list(data.DIRECTION_VALUES), key="direction"
-    )
+    direction = st.selectbox(i18n.SIDEBAR_DIRECTION, list(data.DIRECTION_VALUES), key="direction")
     day_type = st.selectbox(
         i18n.SIDEBAR_DAY_TYPE,
         views.day_types(combined),
@@ -264,10 +262,7 @@ with stops_tab:
             f"geometry_generated={stops['audit_geometry_generated']})"
         )
         if mode == data.DATA_MODE_SYNTHETIC:
-            st.markdown(
-                "Decisión y valores **sintéticos** (fixture de demostración) "
-                "— ver `data/demo/README.md`."
-            )
+            st.markdown("Decisión y valores **sintéticos** (fixture de demostración) — ver `data/demo/README.md`.")
         else:
             st.markdown("— ver `docs/coordinate-quality-audit.md`.")
         st.markdown(f"SHA-256 de los valores auditados: `{stops['audit_raw_sha256']}`")
@@ -285,10 +280,7 @@ with stops_tab:
             for column, category in views.audit_columns_with_examples(audit):
                 examples = views.audit_example_rows(audit, column, category, cap=5)
                 gloss = i18n.CATEGORY_GLOSSES.get(category, category)
-                st.markdown(
-                    f"**{column} — {category}** "
-                    f"({examples['total']} valores; {gloss})"
-                )
+                st.markdown(f"**{column} — {category}** ({examples['total']} valores; {gloss})")
                 for example in examples["rows"]:
                     st.markdown(f"- Fila {example['row']}: `{example['value']}`")
     else:
@@ -299,11 +291,7 @@ with evidence_tab:
         st.subheader("Evidencia y provenance — modo demostración")
         st.warning(data.SYNTHETIC_PROVENANCE_WARNING)
         fixture_meta = combined.get("fixture") or {}
-        st.markdown(
-            data.SYNTHETIC_PROVENANCE_INTRO.format(
-                fixture_name=fixture_meta.get("name", "desconocido")
-            )
-        )
+        st.markdown(data.SYNTHETIC_PROVENANCE_INTRO.format(fixture_name=fixture_meta.get("name", "desconocido")))
         for snapshot in fixture_meta.get("snapshots") or []:
             st.markdown(
                 f"- `{snapshot['dataset_id']}` — `{snapshot['snapshot_id']}` "

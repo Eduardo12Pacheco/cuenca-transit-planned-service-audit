@@ -11,7 +11,7 @@ import io
 import json
 import re
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -192,9 +192,7 @@ def _is_official_cc_by_nc_2_0_url(published: object) -> bool:
 
 def _is_geometric_resource(resource: dict) -> bool:
     """True cuando id/name/description/url identifican datos geometry/geoespaciales."""
-    text = " ".join(
-        str(resource.get(key) or "").lower() for key in ("id", "name", "description", "url")
-    )
+    text = " ".join(str(resource.get(key) or "").lower() for key in ("id", "name", "description", "url"))
     return any(marker in text for marker in _GEOMETRY_MARKERS)
 
 
@@ -214,7 +212,7 @@ def _parse_utc(value: object) -> datetime | None:
         return None
     if parsed.tzinfo is None:
         return None
-    return parsed.astimezone(timezone.utc) if parsed.utcoffset() == timedelta(0) else None
+    return parsed.astimezone(UTC) if parsed.utcoffset() == timedelta(0) else None
 
 
 def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> SourceSnapshot:
@@ -240,7 +238,7 @@ def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> 
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise SnapshotValidationError(f"el manifest no es JSON legible en {manifest_path}: {exc}")
+        raise SnapshotValidationError(f"el manifest no es JSON legible en {manifest_path}: {exc}") from exc
     if not isinstance(manifest, dict):
         raise SnapshotValidationError(
             f"el manifest no es un objeto JSON en {manifest_path} (encontrado {type(manifest).__name__})"
@@ -267,9 +265,7 @@ def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> 
     # -- marcas de tiempo -------------------------------------------------------
     collection_utc = manifest.get("collection_timestamp_utc")
     if not isinstance(collection_utc, str) or _parse_utc(collection_utc) is None:
-        problems.append(
-            f"collection_timestamp_utc {collection_utc!r} no es una marca de tiempo UTC ISO-8601 válida"
-        )
+        problems.append(f"collection_timestamp_utc {collection_utc!r} no es una marca de tiempo UTC ISO-8601 válida")
     source_published_at = manifest.get("source_published_at")
     if not _is_blank(source_published_at) and _parse_iso(source_published_at) is None:
         problems.append(
@@ -281,17 +277,13 @@ def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> 
     dataset_id = manifest.get("dataset_id")
     if dataset_id not in CKAN_PACKAGE_SHOW_URLS:
         problems.append(
-            f"dataset_id {dataset_id!r} no es uno de los datasets aprobados "
-            f"{sorted(CKAN_PACKAGE_SHOW_URLS)}"
+            f"dataset_id {dataset_id!r} no es uno de los datasets aprobados {sorted(CKAN_PACKAGE_SHOW_URLS)}"
         )
         dataset_id = None  # evita el KeyError de abajo mientras problems ya lo reporta
 
     source_url = manifest.get("source_url")
     if dataset_id is not None and source_url != CKAN_PACKAGE_SHOW_URLS[dataset_id]:
-        problems.append(
-            f"source_url {source_url!r} no es la URL package_show aprobada exacta de "
-            f"{dataset_id}"
-        )
+        problems.append(f"source_url {source_url!r} no es la URL package_show aprobada exacta de {dataset_id}")
 
     source_id = manifest.get("source_id")
     if dataset_id is not None and source_id != DATASET_SPECS[dataset_id]["source_id"]:
@@ -305,9 +297,7 @@ def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> 
     if not _is_official_cc_by_nc_2_0_url(license_url):
         problems.append(f"license_url {license_url!r} no es la URL oficial CC BY-NC 2.0")
     if manifest.get("license_declared") != _REQUIRED_LICENSE_DECLARED:
-        problems.append(
-            f"license_declared {manifest.get('license_declared')!r} != {_REQUIRED_LICENSE_DECLARED!r}"
-        )
+        problems.append(f"license_declared {manifest.get('license_declared')!r} != {_REQUIRED_LICENSE_DECLARED!r}")
 
     # -- atribución / consistencia de resource ---------------------------------
     if _is_blank(manifest.get("attribution")):
@@ -321,13 +311,9 @@ def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> 
     resource_format = manifest.get("resource_format")
     nested_format = resource.get("format") if resource else None
     if resource_format is None or not isinstance(resource_format, str) or resource_format.strip().upper() != "CSV":
-        problems.append(
-            f"resource_format {resource_format!r} no es CSV; solo se aceptan recursos CSV"
-        )
+        problems.append(f"resource_format {resource_format!r} no es CSV; solo se aceptan recursos CSV")
     elif not (isinstance(nested_format, str) and nested_format.strip().upper() == "CSV"):
-        problems.append(
-            f"el formato anidado de resource {nested_format!r} es inconsistente (se esperaba CSV)"
-        )
+        problems.append(f"el formato anidado de resource {nested_format!r} es inconsistente (se esperaba CSV)")
 
     resource_id = manifest.get("resource_id")
     if resource and resource.get("id") != resource_id:
@@ -353,18 +339,13 @@ def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> 
     else:
         if source_metadata.get("name") != dataset_id:
             problems.append(
-                f"source_metadata.name {source_metadata.get('name')!r} no coincide con "
-                f"dataset_id {dataset_id!r}"
+                f"source_metadata.name {source_metadata.get('name')!r} no coincide con dataset_id {dataset_id!r}"
             )
         published_resources = source_metadata.get("resources")
         if not isinstance(published_resources, list):
             problems.append("source_metadata.resources falta o no es una lista")
-        elif resource_id not in [
-            entry.get("id") for entry in published_resources if isinstance(entry, dict)
-        ]:
-            problems.append(
-                f"source_metadata.resources no contiene el resource_id seleccionado {resource_id!r}"
-            )
+        elif resource_id not in [entry.get("id") for entry in published_resources if isinstance(entry, dict)]:
+            problems.append(f"source_metadata.resources no contiene el resource_id seleccionado {resource_id!r}")
 
     # -- ruta raw --------------------------------------------------------------
     raw_file = manifest.get("raw_file")
@@ -399,8 +380,7 @@ def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> 
     digest = hashlib.sha256(raw_bytes).hexdigest()
     if digest != content_hash:
         problems.append(
-            f"el content_hash no coincide: el manifest declara {content_hash}, "
-            f"los bytes raw generan el hash {digest}"
+            f"el content_hash no coincide: el manifest declara {content_hash}, los bytes raw generan el hash {digest}"
         )
     try:
         text = raw_bytes.decode("utf-8")
@@ -434,7 +414,8 @@ def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> 
         _raise_with(problems)
 
     rows = [
-        dict(zip(header, row, strict=True)) for row in data_rows  # type: ignore[name-defined]
+        dict(zip(header, row, strict=True))
+        for row in data_rows  # type: ignore[name-defined]
     ]
     return SourceSnapshot(
         snapshot_id=manifest["snapshot_id"],
@@ -469,6 +450,4 @@ def validate_source_snapshot(manifest_path: str | Path, raw_dir: str | Path) -> 
 
 
 def _raise_with(problems: list[str]) -> None:
-    raise SnapshotValidationError(
-        "falló la validación del snapshot de fuente:\n- " + "\n- ".join(problems)
-    )
+    raise SnapshotValidationError("falló la validación del snapshot de fuente:\n- " + "\n- ".join(problems))

@@ -112,9 +112,7 @@ _WKT_KEYWORDS = (
 # opcional. Exigir el límite '(' mantiene palabras comunes como "POINTLESS"
 # fuera de la categoría WKT.
 _WKT_RE = re.compile(
-    r"^(?:SRID=\d+;)?\s*(?:"
-    + "|".join(re.escape(keyword) for keyword in _WKT_KEYWORDS)
-    + r")\s*\(",
+    r"^(?:SRID=\d+;)?\s*(?:" + "|".join(re.escape(keyword) for keyword in _WKT_KEYWORDS) + r")\s*\(",
     re.IGNORECASE,
 )
 _DEGREE_MARKERS = ("°", "º")
@@ -249,23 +247,15 @@ def audit_coordinate_formats(manifest_path: str | Path, raw_dir: str | Path) -> 
     missing_columns = [column for column in COORDINATE_COLUMNS if column not in snapshot.header]
     if missing_columns:
         problems.append(
-            "faltan columna(s) de coordenadas requerida(s) en el encabezado raw: "
-            + ", ".join(missing_columns)
+            "faltan columna(s) de coordenadas requerida(s) en el encabezado raw: " + ", ".join(missing_columns)
         )
     if problems:
         raise CoordinateAuditError(
-            "la auditoría de formato de coordenadas falló cerrada (fail closed):\n- "
-            + "\n- ".join(problems)
+            "la auditoría de formato de coordenadas falló cerrada (fail closed):\n- " + "\n- ".join(problems)
         )
 
-    counts = {
-        column: {category: 0 for category in COORDINATE_CATEGORIES}
-        for column in COORDINATE_COLUMNS
-    }
-    examples = {
-        column: {category: [] for category in COORDINATE_CATEGORIES}
-        for column in COORDINATE_COLUMNS
-    }
+    counts = {column: {category: 0 for category in COORDINATE_CATEGORIES} for column in COORDINATE_COLUMNS}
+    examples = {column: {category: [] for category in COORDINATE_CATEGORIES} for column in COORDINATE_COLUMNS}
     rows_with_any_nonblank = 0
     rows_with_both_nonblank = 0
     for row_index, row in enumerate(snapshot.rows, start=1):
@@ -275,7 +265,7 @@ def audit_coordinate_formats(manifest_path: str | Path, raw_dir: str | Path) -> 
             rows_with_any_nonblank += 1
         if len(nonblank) == len(COORDINATE_COLUMNS):
             rows_with_both_nonblank += 1
-        for column, value in zip(COORDINATE_COLUMNS, values):
+        for column, value in zip(COORDINATE_COLUMNS, values, strict=True):
             category = classify_coordinate_value(value)
             counts[column][category] += 1
             if len(examples[column][category]) < MAX_EXAMPLES_PER_CATEGORY:
@@ -423,8 +413,10 @@ def render_coordinate_audit_markdown(audit: dict) -> str:
     lines.append(
         "1. `blank` — vacío o solo espacios\n"
         "2. `sentinel` — el valor recortado es exactamente `?` (nunca una coordenada)\n"
-        "3. `wkt_or_geometry_candidate` — texto obvio de WKT/geometría, revisado antes de DMS/numérico\n"
-        "4. `thousands_separator_candidate` — numerales agrupados canónicos (2+ separadores de punto/comma, grupos de 3 dígitos)\n"
+        "3. `wkt_or_geometry_candidate` — texto obvio de WKT/geometría, "
+        "revisado antes de DMS/numérico\n"
+        "4. `thousands_separator_candidate` — numerales agrupados canónicos "
+        "(2+ separadores de punto/comma, grupos de 3 dígitos)\n"
         "5. `decimal_comma_candidate` — una sola coma como separador decimal\n"
         "6. `decimal_candidate` — sintaxis estricta decimal con punto\n"
         "7. `dms_candidate` — marcadores obvios de grado/hemisferio\n"
@@ -467,9 +459,7 @@ def render_coordinate_audit_markdown(audit: dict) -> str:
             lines.append("| Fila | Valor raw exacto |")
             lines.append("|---|---|")
             for example in examples:
-                lines.append(
-                    f"| {example['row']} | `{_escape_markdown(example['value'])}` |"
-                )
+                lines.append(f"| {example['row']} | `{_escape_markdown(example['value'])}` |")
             lines.append("")
 
     lines.append("## Evidencia")
@@ -504,8 +494,7 @@ def render_coordinate_audit_markdown(audit: dict) -> str:
     lines.append("Próximos pasos:")
     lines.append("")
     lines.append(
-        "- [ ] Obtener el diccionario de datos oficial / la documentación de fuente "
-        "para `Latitud`/`Longitud`."
+        "- [ ] Obtener el diccionario de datos oficial / la documentación de fuente para `Latitud`/`Longitud`."
     )
     lines.append("- [ ] Confirmar formato, orden de ejes y CRS antes de cualquier conversión.")
     lines.append("- [ ] Volver a ejecutar esta auditoría después de cualquier cambio de captura.")
@@ -513,9 +502,7 @@ def render_coordinate_audit_markdown(audit: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def write_coordinate_audit_artifacts(
-    audit: dict, json_path: str | Path, markdown_path: str | Path
-) -> dict:
+def write_coordinate_audit_artifacts(audit: dict, json_path: str | Path, markdown_path: str | Path) -> dict:
     """Escribe el JSON de auditoría y el reporte Markdown orientado al lector.
 
     El JSON se escribe en UTF-8 (sin BOM) con indentación determinista de 2
@@ -526,8 +513,6 @@ def write_coordinate_audit_artifacts(
     markdown_path = Path(markdown_path)
     json_path.parent.mkdir(parents=True, exist_ok=True)
     markdown_path.parent.mkdir(parents=True, exist_ok=True)
-    json_path.write_text(
-        json.dumps(audit, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    json_path.write_text(json.dumps(audit, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     markdown_path.write_text(render_coordinate_audit_markdown(audit), encoding="utf-8")
     return {"json_path": str(json_path), "markdown_path": str(markdown_path)}

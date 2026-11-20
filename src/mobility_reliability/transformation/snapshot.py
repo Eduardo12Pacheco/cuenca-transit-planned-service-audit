@@ -203,9 +203,7 @@ def _stop_record(snapshot: SourceSnapshot, index: int, row: dict) -> dict:
 # ---------------------------------------------------------------------------
 
 
-def _service_records(
-    snapshot: SourceSnapshot, index: int, row: dict, route_network_id: str
-) -> list[dict]:
+def _service_records(snapshot: SourceSnapshot, index: int, row: dict, route_network_id: str) -> list[dict]:
     route_line = _typed(row.get("LINEA", ""))
     direction = _typed(row.get("SENTIDO", ""))
     records: list[dict] = []
@@ -298,9 +296,7 @@ def _duplicate_counts(rows: list[dict], natural_key_fields: tuple[str, ...]) -> 
     }
 
 
-def _quality_report(
-    snapshot: SourceSnapshot, network_records: list[dict], service_records: list[dict]
-) -> dict:
+def _quality_report(snapshot: SourceSnapshot, network_records: list[dict], service_records: list[dict]) -> dict:
     rows = snapshot.rows
     is_routes = snapshot.dataset_id == ROUTES_DATASET_ID
     warnings = [f"manifest: {warning}" for warning in snapshot.warnings]
@@ -321,10 +317,7 @@ def _quality_report(
     )
     for kind, counts in (("full-row", duplicates["full_row"]), ("natural-key", duplicates["natural_key"])):
         if counts["duplicate_rows"]:
-            warnings.append(
-                f"{counts['duplicate_rows']} filas duplicadas {kind} en "
-                f"{counts['duplicated_keys']} claves"
-            )
+            warnings.append(f"{counts['duplicate_rows']} filas duplicadas {kind} en {counts['duplicated_keys']} claves")
 
     # SENTIDO (solo rutas). unknown_count cuenta las filas cuyo SENTIDO
     # recortado no es IDA/RETORNO (filas en blanco incluidas; el blanco además
@@ -395,8 +388,7 @@ def _quality_report(
         interval_invalid = sum(
             1
             for s in service_records
-            if s["service_status"] != "no_service"
-            and (s["planned_headway"] is None or s["planned_headway"] <= 0)
+            if s["service_status"] != "no_service" and (s["planned_headway"] is None or s["planned_headway"] <= 0)
         )
         schedule = {
             "cells_total": schedule_cells,
@@ -419,10 +411,7 @@ def _quality_report(
         if malformed_cells:
             warnings.append(f"{malformed_cells} celdas de horario están malformadas")
         if over_24h_cells:
-            warnings.append(
-                f"{over_24h_cells} celdas de horario superan 24:00 "
-                "(relativas al día de servicio)"
-            )
+            warnings.append(f"{over_24h_cells} celdas de horario superan 24:00 (relativas al día de servicio)")
         if invalid_windows:
             warnings.append(f"{invalid_windows} ventanas de horario activas son inválidas")
         if interval_invalid:
@@ -482,10 +471,7 @@ def transform_snapshot(manifest_path, raw_dir) -> dict:
             network_records.append(record)
             service_records.extend(_service_records(snapshot, index, row, record["network_id"]))
     else:
-        network_records = [
-            _stop_record(snapshot, index, row)
-            for index, row in enumerate(snapshot.rows, start=1)
-        ]
+        network_records = [_stop_record(snapshot, index, row) for index, row in enumerate(snapshot.rows, start=1)]
         service_records = []
     return {
         "source_snapshot": snapshot.as_dict(),

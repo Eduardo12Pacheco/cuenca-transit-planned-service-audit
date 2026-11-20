@@ -18,9 +18,7 @@ SIDEBAR_LINE = "Línea"
 SIDEBAR_DIRECTION = "Sentido"
 SIDEBAR_DAY_TYPE = "Tipo de día"
 SIDEBAR_EVIDENCE = "Evidencia del snapshot"
-SIDEBAR_EVIDENCE_HINT = (
-    "Todos los valores provienen de estos dos snapshots y de nada más."
-)
+SIDEBAR_EVIDENCE_HINT = "Todos los valores provienen de estos dos snapshots y de nada más."
 
 TAB_PLANNED = "Servicio planificado"
 TAB_ROUTE_QUALITY = "Calidad de rutas"
